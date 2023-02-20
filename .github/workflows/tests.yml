@@ -73,12 +73,12 @@ jobs:
           echo "=== Testing wheel installation ==="
           python -m venv .venv-whl
           .venv-whl/$PYTHON_BIN -m pip install --upgrade pip
-          .venv-whl/$PYTHON_BIN -m pip install dist/reprexlite-*.whl
+          .venv-whl/$PYTHON_BIN -m pip install dist/typenames-*.whl
           .venv-whl/$PYTHON_BIN -c "from typenames import typenames"
           echo "=== Testing source installation ==="
           python -m venv .venv-sdist
           .venv-sdist/$PYTHON_BIN -m pip install --upgrade pip
-          .venv-sdist/$PYTHON_BIN -m pip install dist/reprexlite-*.tar.gz --force-reinstall
+          .venv-sdist/$PYTHON_BIN -m pip install dist/typenames-*.tar.gz --force-reinstall
           .venv-sdist/$PYTHON_BIN -c "from typenames import typenames"
 
       - name: Test building documentation
