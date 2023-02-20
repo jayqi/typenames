@@ -28,35 +28,48 @@ T = typing.TypeVar("T", bound=type)
 
 
 class UnionSyntax(str, Enum):
+    """Enum for union syntax options. See "Union Syntax" section of README for documentation."""
+
     AS_GIVEN = "as_given"
     OR_OPERATOR = "or_operator"
-    UNION_SPECIAL_FORM = "union_special_form"
+    SPECIAL_FORM = "special_form"
 
 
 class OptionalSyntax(str, Enum):
+    """Enum for optional syntax options. See "Optional Syntax" section of README for
+    documentation."""
+
     AS_GIVEN = "as_given"
     OR_OPERATOR = "or_operator"
     OPTIONAL_SPECIAL_FORM = "optional_special_form"
+    UNION_SPECIAL_FORM = "union_special_form"
 
 
 class StandardCollectionSyntax(str, Enum):
+    """Enum for standard collection parameterized generic options. See "Standard Collection Syntax"
+    section of README for documentation."""
+
     AS_GIVEN = "as_given"
     STANDARD_CLASS = "standard_class"
     TYPING_MODULE = "typing_module"
 
 
-DEFAULT_REMOVE_MODULES: typing.List[typing.Union[str, re.Pattern]] = [
+DEFAULT_REMOVE_MODULES: List[Union[str, re.Pattern]] = [
     "builtins",
-    "typing",
     re.compile(r"^collections\.(abc\.)?"),
     "contextlib",
     "re",
+    "types",
+    "typing",
 ]
-"""List of standard library modules used as the default value for the remove_modules option. """
+"""List of standard library modules used as the default value for the remove_modules option."""
 
 
 @dataclasses.dataclass
 class TypenamesConfig:
+    """Dataclass that holds all configuration options. See "Configurable options" section of README
+    for documentation."""
+
     union_syntax: UnionSyntax = UnionSyntax.AS_GIVEN
     optional_syntax: OptionalSyntax = OptionalSyntax.AS_GIVEN
     standard_collection_syntax: StandardCollectionSyntax = StandardCollectionSyntax.AS_GIVEN
@@ -71,12 +84,13 @@ class TypenamesConfig:
 
     @property
     def remove_modules_patterns(self) -> typing.Iterator[re.Pattern]:
-        """Generator that returns remove_modules configuration values as compiled regex
+        """Generator that yields remove_modules configuration values as compiled regex
         patterns."""
-        for m in self.remove_modules:
-            if isinstance(m, re.Pattern):
-                yield m
-            yield re.compile(rf"^{m}\.")
+        for module in self.remove_modules:
+            if isinstance(module, re.Pattern):
+                yield module
+            else:
+                yield re.compile(r"^{}\.".format(module.replace(".", r"\.")))
 
 
 @dataclasses.dataclass(repr=False)
@@ -142,9 +156,25 @@ class GenericNode(BaseNode):
             if any(a.is_none_type for a in arg_nodes):
                 if self.config.optional_syntax == OptionalSyntax.OR_OPERATOR:
                     return " | ".join(str(a) for a in arg_nodes)
+                elif self.config.optional_syntax == OptionalSyntax.UNION_SPECIAL_FORM:
+                    origin_name = "typing.Union"
                 else:
                     origin_name = "typing.Optional"
                     arg_nodes = [a for a in arg_nodes if a.tp is not type(None)]
+                    if len(arg_nodes) > 1:
+                        # typing.Optional is only valid for a single parameter,
+                        # need to use a union inside
+                        arg_nodes = [
+                            GenericNode(
+                                tp=typing.Union[  # type: ignore[arg-type]
+                                    tuple(a.tp for a in arg_nodes)
+                                ],
+                                config=self.config,
+                                origin=typing.Union,
+                                arg_nodes=arg_nodes,
+                            )
+                        ]
+
             # Case: regular Union
             else:
                 if self.config.union_syntax == UnionSyntax.OR_OPERATOR:
@@ -153,15 +183,30 @@ class GenericNode(BaseNode):
                     origin_name = "typing.Union"
         # Case: Union with | operator (bitwise or)
         elif is_union_or_operator(self.tp):
-            # Case: ... | None and configured to use typing.Optional
-            if self.config.optional_syntax == OptionalSyntax.OPTIONAL_SPECIAL_FORM and any(
-                a.is_none_type for a in arg_nodes
-            ):
+            is_optional = any(a.is_none_type for a in arg_nodes)
+            # Case: ... | None (optional) and configured to use typing.Optional
+            if is_optional and self.config.optional_syntax == OptionalSyntax.OPTIONAL_SPECIAL_FORM:
                 origin_name = "typing.Optional"
                 arg_nodes = [a for a in arg_nodes if a.tp is not type(None)]
+                if len(arg_nodes) > 1:
+                    # typing.Optional is only valid for a single parameter,
+                    # need to use a union inside
+                    arg_nodes = [
+                        GenericNode(
+                            tp=typing.Union[  # type: ignore[arg-type]
+                                tuple(a.tp for a in arg_nodes)
+                            ],
+                            config=self.config,
+                            origin=typing.Union,
+                            arg_nodes=arg_nodes,
+                        )
+                    ]
+            # Case: ... | None (optional) and configured to use typing.Union
+            elif is_optional and self.config.optional_syntax == OptionalSyntax.UNION_SPECIAL_FORM:
+                origin_name = "typing.Union"
             # Case: regular union
             else:
-                if self.config.union_syntax == UnionSyntax.UNION_SPECIAL_FORM:
+                if self.config.union_syntax == UnionSyntax.SPECIAL_FORM:
                     origin_name = "typing.Union"
                 else:
                     return " | ".join(str(a) for a in arg_nodes)
@@ -235,7 +280,10 @@ class LiteralNode(BaseNode):
         )
 
     def __str__(self) -> str:
-        return repr(self.tp)
+        if isinstance(self.tp, Enum):
+            return f"{self.tp.__class__.__name__}.{self.tp.name}"
+        else:
+            return repr(self.tp)
 
 
 def parse_type_tree(tp: type, config: Optional[TypenamesConfig] = None, **kwargs: Any) -> BaseNode:
@@ -245,7 +293,8 @@ def parse_type_tree(tp: type, config: Optional[TypenamesConfig] = None, **kwargs
         tp (type): Type annotation
         config (Optional[TypenamesConfig]): Configuration dataclass. Defaults to None, which will
             instantiate one with default values.
-        **kwargs: Override configuration options on provided or default configuration.
+        **kwargs: Override configuration options on provided or default configuration. See
+            "Configurable options" section of README for documentation.
 
     Returns:
         BaseNode: Root node of parsed type tree
@@ -282,7 +331,8 @@ def typenames(tp: type, config: Optional[TypenamesConfig] = None, **kwargs: Any)
         tp (type): Type annotation.
         config (Optional[TypenamesConfig]): Configuration dataclass. Defaults to None, which will
             instantiate one with default values.
-        **kwargs: Override configuration options on provided or default configuration.
+        **kwargs: Override configuration options on provided or default configuration. See
+            "Configurable options" section of README for documentation.
 
     Returns:
         str: String representation of input type.

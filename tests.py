@@ -1,4 +1,5 @@
 import collections
+import enum
 import sys
 import typing
 
@@ -14,6 +15,8 @@ from typenames import (
     typenames,
 )
 
+T = typing.TypeVar("T")
+
 
 class MyClass:
     pass
@@ -24,9 +27,14 @@ class OuterClass:
         pass
 
 
-class MyGeneric(typing.Generic[typing.T]):
-    def __init__(self, x: typing.T):
+class MyGeneric(typing.Generic[T]):
+    def __init__(self, x: T):
         self.x = x
+
+
+class MyEnum(enum.Enum):
+    MEMBER1 = "member1"
+    MEMBER2 = "member2"
 
 
 cases = [
@@ -46,7 +54,10 @@ cases = [
     (typing.Callable[[int], str], "Callable[[int], str]"),
     (typing.Callable[[int, float], str], "Callable[[int, float], str]"),
     (MyGeneric[int], "MyGeneric[int]"),
+    (MyEnum, "MyEnum"),
+    (typing.ForwardRef("int"), "int"),
     (typing.ForwardRef("MyClass"), "MyClass"),
+    (typing.ForwardRef("OuterClass.InnerClass"), "OuterClass.InnerClass"),
 ]
 
 if sys.version_info >= (3, 8):
@@ -59,7 +70,7 @@ if sys.version_info >= (3, 8):
 
     cases.extend(
         [
-            (typing.Literal["r", "w"], "Literal['r', 'w']"),
+            (typing.Literal["s", 0, MyEnum.MEMBER1], "Literal['s', 0, MyEnum.MEMBER1]"),
             (typing.Final[int], "Final[int]"),
             (MyTypedDict, "MyTypedDict"),
         ]
@@ -89,6 +100,7 @@ if sys.version_info >= (3, 10):
             (int | str, "int | str"),
             (int | None, "int | None"),
             (None | int, "None | int"),
+            (int | None | str, "int | None | str"),
         ]
     )
 
@@ -127,12 +139,10 @@ def test_union_syntax_or_operator():
 
 def test_union_syntax_union_special_form():
     """Test that forcing optional_syntax='union_special_form' results in Union[...]"""
-    assert (
-        typenames(typing.Union[int, str], union_syntax="union_special_form") == "Union[int, str]"
-    )
+    assert typenames(typing.Union[int, str], union_syntax="special_form") == "Union[int, str]"
 
     if sys.version_info >= (3, 10):
-        assert typenames(int | str, union_syntax="union_special_form") == "Union[int, str]"
+        assert typenames(int | str, union_syntax="special_form") == "Union[int, str]"
 
 
 def test_optional_syntax_or_operator():
@@ -144,7 +154,7 @@ def test_optional_syntax_or_operator():
         assert typenames(None | int, union_syntax="or_operator") == "None | int"
 
 
-def test_optional_syntax_optional_alias():
+def test_optional_syntax_optional_special_form():
     """Test that forcing optional_syntax='optional_special_form' results in Optional[...]."""
     assert (
         typenames(typing.Optional[int], optional_syntax="optional_special_form") == "Optional[int]"
@@ -153,6 +163,43 @@ def test_optional_syntax_optional_alias():
     if sys.version_info >= (3, 10):
         assert typenames(int | None, optional_syntax="optional_special_form") == "Optional[int]"
         assert typenames(None | int, optional_syntax="optional_special_form") == "Optional[int]"
+
+
+def test_optional_syntax_union_special_form():
+    """Test that forcing optional_syntax='union_special_form' results in Union[...]."""
+    assert (
+        typenames(typing.Optional[int], optional_syntax="union_special_form") == "Union[int, None]"
+    )
+
+    if sys.version_info >= (3, 10):
+        assert typenames(int | None, optional_syntax="union_special_form") == "Union[int, None]"
+        assert typenames(None | int, optional_syntax="union_special_form") == "Union[None, int]"
+
+
+def test_optional_multiple_params():
+    """Test case that a type annotation resolves to the optional case but with multiple non-None
+    parameters."""
+    assert typenames(typing.Optional[typing.Union[int, str]]) == "Optional[Union[int, str]]"
+
+    if sys.version_info >= (3, 10):
+        assert (
+            typenames(int | str | None, optional_syntax="optional_special_form")
+            == "Optional[Union[int, str]]"
+        )
+        assert (
+            typenames(int | None | str, optional_syntax="optional_special_form")
+            == "Optional[Union[int, str]]"
+        )
+
+        # union_syntax='or_operator'
+        assert (
+            typenames(
+                int | None | str,
+                optional_syntax="optional_special_form",
+                union_syntax="or_operator",
+            )
+            == "Optional[int | str]"
+        )
 
 
 def test_standard_collection_syntax_standard_class():
