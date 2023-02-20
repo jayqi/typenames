@@ -41,6 +41,8 @@ path = "typenames.py"
 exclude = ["inspect_types/", "docs/", "mkdocs.yml"]
 
 
+## DEFAULT ENVIRONMENT ##
+
 [tool.hatch.envs.default]
 dependencies = ["black", "ipython", "mypy", "reprexlite", "ruff"]
 python = "3.10"
@@ -51,7 +53,10 @@ lint = [
   "black --check typenames.py tests.py",
   "ruff check typenames.py tests.py",
 ]
-typecheck = ["mypy typenames.py"]
+typecheck = ["mypy typenames.py --install-types --non-interactive"]
+
+
+## TESTS ENVIRONMENT ##
 
 [tool.hatch.envs.tests]
 features = ["tests"]
@@ -65,6 +70,9 @@ python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
 run = "pytest tests.py --cov=typenames --cov-report=term --cov-report=html --cov-report=xml"
 run-debug = "run --pdb"
 
+
+## DOCS ENVIRONMENT ##
+
 [tool.hatch.envs.docs]
 dependencies = [
   "mkdocs",
@@ -73,6 +81,7 @@ dependencies = [
   "mkdocstrings[python]",
   "mdx-truly-sane-lists",
 ]
+template = "docs"
 
 [tool.hatch.envs.docs.scripts]
 build = [
@@ -81,6 +90,9 @@ build = [
   "cp CHANGELOG.md docs/changelog.md",
   "mkdocs build",
 ]
+
+
+## INSPECT-TYPES ENVIRONMENT ##
 
 [tool.hatch.envs.inspect-types]
 dependencies = ["ipykernel", "nbconvert"]
@@ -97,6 +109,8 @@ jupyter nbconvert inspect_types/_inspect_types.ipynb \
 --execute \
 --allow-errors"""
 
+
+## TOOLS ##
 
 [tool.black]
 line-length = 99
