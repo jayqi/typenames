@@ -6,7 +6,7 @@
 [![tests](https://github.com/jayqi/typenames/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/jayqi/typenames/actions/workflows/tests.yml?query=branch%3Amain)
 [![codecov](https://codecov.io/gh/jayqi/typenames/branch/main/graph/badge.svg)](https://codecov.io/gh/jayqi/typenames)
 
-typenames is a configurable Python library for creating string representations of type annotations. By default, it produces compact representations by removing standard library module names. Configurable options include standardizing on `|` operator syntax for unions or standard collections classes for generics.
+**typenames** is a configurable Python library for creating string representations of type annotations. By default, it produces compact representations by removing standard library module names. Configurable options include standardizing on `|` operator syntax for unions or standard collections classes for generics.
 
 ```python
 import typing
@@ -134,7 +134,7 @@ module: str  # Given module name
 re.compile(r"^{}\.".format(module.replace(".", r"\.")))
 ```
 
-Note that module names are removed in the given order, so having entries that are submodules of other entries can lead to the wrong behavior. You can either order them from higher-depth to lower-depth, or directly provide a compiled pattern with optional groups. For example, the pattern `re.compile(r"^collections\.(abc\.)?")` will match both `"collections."` and `"collections.abc."`.
+Note that module names are removed in the given order, so having entries that are submodules of other entries can potentially lead to the wrong behavior. You can either order them from higher-depth to lower-depth, or directly provide a compiled pattern with optional groups. For example, the pattern `re.compile(r"^collections\.(abc\.)?")` will match both `"collections."` and `"collections.abc."`.
 
 The default list of module names include the standard library modules relevant to [PEP 585](https://peps.python.org/pep-0585/) plus `types` and `typing`. It can be accessed at `DEFAULT_REMOVE_MODULES`.
 
