@@ -1,0 +1,69 @@
+name: release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    name: Build and publish new release
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Install hatch
+        run: |
+          pip install hatch
+
+      - name: Check that versions match
+        id: version
+        run: |
+          echo "Release tag: [${{ github.event.release.tag_name }}]"
+          PACKAGE_VERSION=$(python -c "import typenames; print(typenames.__version__)")
+          echo "Package version: [$PACKAGE_VERSION]"
+          [ ${{ github.event.release.tag_name }} == "v$PACKAGE_VERSION" ] || { exit 1; }
+          echo "::set-output name=major_minor_version::v${PACKAGE_VERSION%.*}"
+
+      - name: Build package
+        run: |
+          hatch build
+
+      - name: Publish to Test PyPI
+        uses: pypa/gh-action-pypi-publish@v1.3.0
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TEST_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+          skip_existing: true
+
+      - name: Publish to Production PyPI
+        uses: pypa/gh-action-pypi-publish@v1.3.0
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_PROD_TOKEN }}
+          skip_existing: false
+
+      - name: Deploy docs to gh-pages
+        working-directory: docs
+        run: |
+          git fetch origin gh-pages --depth=1
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          # Check for old stable version
+          mike list -j | jq
+          OLD_STABLE=$(mike list -j | jq -r '.[] | select(.aliases | index("stable")) | .title' | awk '{print $1;}')
+          echo $OLD_STABLE
+          # Rename old stable version if it exists
+          [[ -z "${OLD_STABLE}" ]] || mike retitle stable $OLD_STABLE
+          # Deploy new version as stable
+          mike deploy --push --update-aliases --no-redirect \
+            ${{ steps.version.outputs.major_minor_version }} \
+            stable \
+            --title="${{ github.event.release.tag_name }} (stable)"
