@@ -1,0 +1,66 @@
+site_name: typenames
+site_url: https://jayqi.github.io/typenames
+site_description: FILL ME IN.
+repo_url: https://github.com/jayqi/typenames
+
+nav:
+  - Home: "index.md"
+  - API Reference: "api-reference.md"
+  - Changelog: "changelog.md"
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    # Palette toggle for light mode
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+extra_css:
+  - css/extra.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+  - pymdownx.superfences:
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - mdx_truly_sane_lists:
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            # Headings options
+            heading_level: 2
+            show_root_toc_entry: false
+            show_root_full_path: false
+            show_root_heading: false
+            show_category_heading: true
+            # Members options
+            filters: ["!^_(?!_init__)"]
+            group_by_category: true
+            # Docstrings options
+            show_if_no_docstring: true
+            # Signatures/annotation options
+            show_signature_annotations: true
+            # Additional options
+            show_source: true
+
+extra:
+  version:
+    provider: mike
+    default: latest

@@ -1,0 +1,139 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "typenames"
+dynamic = ["version"]
+description = "String representations of type annotations."
+readme = "README.md"
+authors = [{ name = "Jay Qi", email = "jayqi.opensource@gmail.com" }]
+license = { file = "LICENSE" }
+keywords = ["typing", "type hints", "type annotations", "pep 585", "pep 604"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+requires-python = ">=3.7"
+dependencies = ["typing_extensions>4 ; python_version < '3.8'"]
+
+[project.optional-dependencies]
+tests = ["pytest>=6"]
+
+[project.urls]
+"Homepage" = "https://jayqi.github.io/typenames/"
+"Repository" = "https://github.com/jayqi/typenames"
+"Documentation" = "https://jayqi.github.io/typenames/"
+"Bug Tracker" = "https://github.com/jayqi/typenames/issues"
+"Changelog" = "https://jayqi.github.io/typenames/stable/changelog/"
+
+[tool.hatch.version]
+path = "typenames.py"
+
+[tool.hatch.build]
+exclude = ["inspect_types/", "docs/", "mkdocs.yml"]
+
+
+[tool.hatch.envs.default]
+dependencies = ["black", "ipython", "mypy", "reprexlite", "ruff"]
+python = "3.10"
+path = ".venv"
+
+[tool.hatch.envs.default.scripts]
+lint = [
+  "black --check typenames.py tests.py",
+  "ruff check typenames.py tests.py",
+]
+typecheck = ["mypy typenames.py"]
+
+[tool.hatch.envs.tests]
+features = ["tests"]
+dependencies = ["coverage", "pytest-cov"]
+template = "tests"
+
+[[tool.hatch.envs.tests.matrix]]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+
+[tool.hatch.envs.tests.scripts]
+run = "pytest tests.py --cov=typenames --cov-report=term --cov-report=html --cov-report=xml"
+run-debug = "run --pdb"
+
+[tool.hatch.envs.docs]
+dependencies = [
+  "mkdocs",
+  "mkdocs-material",
+  "mike",
+  "mkdocstrings[python]",
+  "mdx-truly-sane-lists",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = [
+  "rm -rf site/",
+  "cp README.md docs/index.md",
+  "cp CHANGELOG.md docs/changelog.md",
+  "mkdocs build",
+]
+
+[tool.hatch.envs.inspect-types]
+dependencies = ["ipykernel", "nbconvert"]
+detached = true
+
+[[tool.hatch.envs.inspect-types.matrix]]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+
+[tool.hatch.envs.inspect-types.scripts]
+generate-notebook = """
+jupyter nbconvert inspect_types/_inspect_types.ipynb \
+--to notebook \
+--output inspect_types_{matrix:python}.ipynb \
+--execute \
+--allow-errors"""
+
+
+[tool.black]
+line-length = 99
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | tests/assets
+)/
+'''
+
+[tool.ruff]
+line-length = 99
+select = [
+  "E", # Pyflakes
+  "F", # Pycodestyle
+  "I", # isort
+]
+src = ["typenames.py", "tests.py"]
+unfixable = ["F"]
+
+[tool.ruff.isort]
+known-first-party = ["typenames"]
+force-sort-within-sections = true
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests.py"]
+
+[tool.coverage.run]
+source = ["typenames.py"]
