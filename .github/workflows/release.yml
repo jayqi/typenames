@@ -57,13 +57,13 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           # Check for old stable version
-          mike list -j | jq
+          hatch run docs:mike list -j | jq
           OLD_STABLE=$(mike list -j | jq -r '.[] | select(.aliases | index("stable")) | .title' | awk '{print $1;}')
           echo $OLD_STABLE
           # Rename old stable version if it exists
-          [[ -z "${OLD_STABLE}" ]] || mike retitle stable $OLD_STABLE
+          [[ -z "${OLD_STABLE}" ]] || hatch run docs:mike retitle stable $OLD_STABLE
           # Deploy new version as stable
-          mike deploy --push --update-aliases --no-redirect \
+          hatch run docs:mike deploy --push --update-aliases --no-redirect \
             ${{ steps.version.outputs.major_minor_version }} \
             stable \
             --title="${{ github.event.release.tag_name }} (stable)"
