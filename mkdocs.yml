@@ -1,6 +1,6 @@
 site_name: typenames
 site_url: https://jayqi.github.io/typenames
-site_description: FILL ME IN.
+site_description: String representations of Python type annotations
 repo_url: https://github.com/jayqi/typenames
 
 nav:
@@ -54,7 +54,7 @@ plugins:
             filters: ["!^_(?!_init__)"]
             group_by_category: true
             # Docstrings options
-            show_if_no_docstring: true
+            show_if_no_docstring: false
             # Signatures/annotation options
             show_signature_annotations: true
             # Additional options
@@ -63,4 +63,4 @@ plugins:
 extra:
   version:
     provider: mike
-    default: latest
+    default: stable
