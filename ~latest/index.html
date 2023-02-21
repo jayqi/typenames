@@ -553,7 +553,7 @@
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>typenames
 </code></pre></div>
 <h2 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
-<p>The main way to use the library is the <code>typenames</code> function. Calling it on a type annotation produces string annotations</p>
+<p>The main way to use the library is the <code>typenames</code> function. Calling it on a type annotation renders a string representation:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">typing</span>
 <span class="kn">from</span> <span class="nn">typenames</span> <span class="kn">import</span> <span class="n">typenames</span>
 
@@ -564,7 +564,7 @@
 <span class="n">typenames</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]])</span>
 <span class="c1">#&gt; &#39;Callable[[int], tuple[str, ...]]</span>
 </code></pre></div>
-<p>Under the hood, typenames parses a type annotation as a tree structure. If you need to see the parsed tree, using the <code>parse_type_tree</code> function. You can get the rendered string representation by calling <code>str(...)</code> on the parsed tree.</p>
+<p>Under the hood, typenames parses a type annotation as a tree structure. If you need to see the parsed tree, use the <code>parse_type_tree</code> function to return the root node. You can get the rendered string representation by calling <code>str(...)</code> on root node.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">typing</span>
 <span class="kn">from</span> <span class="nn">typenames</span> <span class="kn">import</span> <span class="n">parse_type_tree</span>
 
