@@ -140,6 +140,7 @@ The default list of module names include the standard library modules relevant t
 
 ```python
 DEFAULT_REMOVE_MODULES: List[Union[str, re.Pattern]] = [
+    "__main__",
     "builtins",
     re.compile(r"^collections\.(abc\.)?"),
     "contextlib",
@@ -152,17 +153,21 @@ DEFAULT_REMOVE_MODULES: List[Union[str, re.Pattern]] = [
 If you are trying to _add_ additional modules to this option (rather than overriding the defaults), the easiest way to do so is to concatenate with the default list:
 
 ```python
-from typing import ForwardRef, Optional
-from typenames import typenames, DEFAULT_REMOVE_MODULES
+from typing import Optional
+from typenames import typenames, DEFAULT_REMOVE_MODULES, BaseNode
 
+typenames(Optional[BaseNode])
+#> 'Optional[typenames.BaseNode]'
+typenames(Optional[BaseNode], remove_modules=["typenames"])
+#> 'typing.Optional[BaseNode]'
 typenames(
-    Optional[ForwardRef("other_module.MyClass")],
-    remove_modules=DEFAULT_REMOVE_MODULES + ["other_module"],
+    Optional[BaseNode],
+    remove_modules=DEFAULT_REMOVE_MODULES + ["typenames"],
 )
-#> 'Optional[MyClass]'
+#> 'Optional[BaseNode]'
 ```
 
-To remove all module names, you can use `re.compile(r"^(\w+\.)+")`.
+To remove all module names, you can use `REMOVE_ALL_MODULES`, which contains the pattern `re.compile(r"^(\w+\.)+")`.
 
 ---
 

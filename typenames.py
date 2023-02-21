@@ -55,6 +55,7 @@ class StandardCollectionSyntax(str, Enum):
 
 
 DEFAULT_REMOVE_MODULES: List[Union[str, re.Pattern]] = [
+    "__main__",
     "builtins",
     re.compile(r"^collections\.(abc\.)?"),
     "contextlib",
@@ -63,6 +64,8 @@ DEFAULT_REMOVE_MODULES: List[Union[str, re.Pattern]] = [
     "typing",
 ]
 """List of standard library modules used as the default value for the remove_modules option."""
+
+REMOVE_ALL_MODULES = [re.compile(r"^(\w+\.)+")]
 
 
 @dataclasses.dataclass
@@ -110,6 +113,14 @@ class BaseNode(abc.ABC, typing.Generic[T]):
             bool: True if this node's tp is NoneType.
         """
 
+    def process_module_prefix(self, module_prefix: str) -> str:
+        """Processes a module prefix (including the trailing '.') according to the 'remove_modules'
+        settings in the given configuration."""
+        # Remove module names
+        for pattern in self.config.remove_modules_patterns:
+            module_prefix = pattern.sub("", module_prefix)
+        return module_prefix
+
     def __repr__(self) -> str:
         return f"<{type(self).__name__} {repr(self.tp)}>"
 
@@ -123,17 +134,33 @@ class TypeNode(BaseNode):
         return self.tp is type(None)
 
     def __str__(self) -> str:
+        if hasattr(self.tp, "__module__"):
+            module_prefix = getattr(self.tp, "__module__") + "."
+        else:
+            module_prefix = ""
+
         if self.tp is Ellipsis:
             type_name = "..."
         elif self.tp is type(None):
             type_name = "None"
+        elif self.tp is typing.Any:
+            type_name = "Any"
         elif isinstance(self.tp, typing.ForwardRef):
-            type_name = self.tp.__forward_arg__
+            forward_arg = self.tp.__forward_arg__
+            # Assume if there is dotted path, then it is a module path
+            if "." in forward_arg:
+                module, dot, type_name = forward_arg.rpartition(".")
+                module_prefix = module + dot
+            else:
+                type_name = forward_arg
         else:
             type_name = getattr(self.tp, "__qualname__", repr(self.tp))
         for pattern in self.config.remove_modules_patterns:
             type_name = pattern.sub("", type_name)
-        return type_name
+        # Remove module names
+        module_prefix = self.process_module_prefix(module_prefix)
+
+        return module_prefix + type_name
 
 
 @dataclasses.dataclass(repr=False)
@@ -157,9 +184,11 @@ class GenericNode(BaseNode):
                 if self.config.optional_syntax == OptionalSyntax.OR_OPERATOR:
                     return " | ".join(str(a) for a in arg_nodes)
                 elif self.config.optional_syntax == OptionalSyntax.UNION_SPECIAL_FORM:
-                    origin_name = "typing.Union"
+                    origin_module_prefix = "typing."
+                    origin_name = "Union"
                 else:
-                    origin_name = "typing.Optional"
+                    origin_module_prefix = "typing."
+                    origin_name = "Optional"
                     arg_nodes = [a for a in arg_nodes if a.tp is not type(None)]
                     if len(arg_nodes) > 1:
                         # typing.Optional is only valid for a single parameter,
@@ -180,13 +209,15 @@ class GenericNode(BaseNode):
                 if self.config.union_syntax == UnionSyntax.OR_OPERATOR:
                     return " | ".join(str(a) for a in arg_nodes)
                 else:
-                    origin_name = "typing.Union"
+                    origin_module_prefix = "typing."
+                    origin_name = "Union"
         # Case: Union with | operator (bitwise or)
         elif is_union_or_operator(self.tp):
             is_optional = any(a.is_none_type for a in arg_nodes)
             # Case: ... | None (optional) and configured to use typing.Optional
             if is_optional and self.config.optional_syntax == OptionalSyntax.OPTIONAL_SPECIAL_FORM:
-                origin_name = "typing.Optional"
+                origin_module_prefix = "typing."
+                origin_name = "Optional"
                 arg_nodes = [a for a in arg_nodes if a.tp is not type(None)]
                 if len(arg_nodes) > 1:
                     # typing.Optional is only valid for a single parameter,
@@ -203,11 +234,13 @@ class GenericNode(BaseNode):
                     ]
             # Case: ... | None (optional) and configured to use typing.Union
             elif is_optional and self.config.optional_syntax == OptionalSyntax.UNION_SPECIAL_FORM:
-                origin_name = "typing.Union"
+                origin_module_prefix = "typing."
+                origin_name = "Union"
             # Case: regular union
             else:
                 if self.config.union_syntax == UnionSyntax.SPECIAL_FORM:
-                    origin_name = "typing.Union"
+                    origin_module_prefix = "typing."
+                    origin_name = "Union"
                 else:
                     return " | ".join(str(a) for a in arg_nodes)
         # Case: Standard collection class alias
@@ -216,33 +249,34 @@ class GenericNode(BaseNode):
                 typing_alias = STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING[
                     get_origin(self.tp)  # type: ignore
                 ]
-                origin_name = f"typing.{typing_alias._name}"  # type: ignore
+                origin_module_prefix = "typing."
+                origin_name = f"{typing_alias._name}"  # type: ignore
             else:
-                origin_name = (
-                    self.origin.__module__
-                    + "."
-                    + self.origin.__qualname__  # type: ignore[union-attr]
-                )
+                origin_module_prefix = self.origin.__module__ + "."
+                origin_name = self.origin.__qualname__  # type: ignore[union-attr]
         # Case: Typing module collection alias
         elif is_typing_module_collection_alias(self.tp):
             if self.config.standard_collection_syntax == StandardCollectionSyntax.STANDARD_CLASS:
-                origin_name = (
-                    self.origin.__module__
-                    + "."
-                    + self.origin.__qualname__  # type: ignore[union-attr]
-                )
+                origin_module_prefix = self.origin.__module__ + "."
+                origin_name = self.origin.__qualname__  # type: ignore[union-attr]
             else:
-                origin_name = f"typing.{self.tp._name}"
+                origin_module_prefix = "typing."
+                origin_name = self.tp._name
         # Case: Some other generic type
         else:
-            origin_name = getattr(self.origin, "__name__", str(self.origin))
+            if hasattr(self.origin, "__module__"):
+                origin_module_prefix = self.origin.__module__ + "."
+            else:
+                origin_module_prefix = ""
+            origin_name = getattr(
+                self.origin, "__name__", getattr(self.origin, "_name", str(self.origin))
+            )
 
         # Remove module names
-        for pattern in self.config.remove_modules_patterns:
-            origin_name = pattern.sub("", origin_name)
+        origin_module_prefix = self.process_module_prefix(origin_module_prefix)
 
         args_string = ", ".join(str(a) for a in arg_nodes)
-        return f"{origin_name}[{args_string}]"
+        return f"{origin_module_prefix}{origin_name}[{args_string}]"
 
     def __repr__(self) -> str:
         args_repr = ", ".join(repr(a) for a in self.arg_nodes)

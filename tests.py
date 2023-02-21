@@ -6,6 +6,8 @@ import typing
 import pytest
 
 from typenames import (
+    DEFAULT_REMOVE_MODULES,
+    REMOVE_ALL_MODULES,
     TypenamesConfig,
     is_standard_collection_type_alias,
     is_typing_module_collection_alias,
@@ -42,10 +44,10 @@ cases = [
     (typing.List[int], "List[int]"),
     (typing.Tuple[str, int], "Tuple[str, int]"),
     (typing.Optional[int], "Optional[int]"),
-    (MyClass, "MyClass"),
-    (OuterClass.InnerClass, "OuterClass.InnerClass"),
-    (typing.List[MyClass], "List[MyClass]"),
-    (typing.Optional[typing.List[MyClass]], "Optional[List[MyClass]]"),
+    (MyClass, "tests.MyClass"),
+    (OuterClass.InnerClass, "tests.OuterClass.InnerClass"),
+    (typing.List[MyClass], "List[tests.MyClass]"),
+    (typing.Optional[typing.List[MyClass]], "Optional[List[tests.MyClass]]"),
     (typing.Union[float, int], "Union[float, int]"),
     (typing.Dict[str, int], "Dict[str, int]"),
     (typing.Any, "Any"),
@@ -53,11 +55,13 @@ cases = [
     (typing.Callable[..., str], "Callable[..., str]"),
     (typing.Callable[[int], str], "Callable[[int], str]"),
     (typing.Callable[[int, float], str], "Callable[[int, float], str]"),
-    (MyGeneric[int], "MyGeneric[int]"),
-    (MyEnum, "MyEnum"),
-    (typing.ForwardRef("int"), "int"),
-    (typing.ForwardRef("MyClass"), "MyClass"),
-    (typing.ForwardRef("OuterClass.InnerClass"), "OuterClass.InnerClass"),
+    (MyGeneric[int], "tests.MyGeneric[int]"),
+    (MyEnum, "tests.MyEnum"),
+    (typing.List["int"], "List[int]"),
+    (typing.List["typing.Any"], "List[Any]"),
+    (typing.List["enum.Enum"], "List[enum.Enum]"),
+    (typing.List["MyClass"], "List[MyClass]"),
+    (typing.List["OuterClass.InnerClass"], "List[OuterClass.InnerClass]"),
 ]
 
 if sys.version_info >= (3, 8):
@@ -72,7 +76,7 @@ if sys.version_info >= (3, 8):
         [
             (typing.Literal["s", 0, MyEnum.MEMBER1], "Literal['s', 0, MyEnum.MEMBER1]"),
             (typing.Final[int], "Final[int]"),
-            (MyTypedDict, "MyTypedDict"),
+            (MyTypedDict, "tests.MyTypedDict"),
         ]
     )
 
@@ -106,7 +110,13 @@ if sys.version_info >= (3, 10):
 
 if sys.version_info >= (3, 11):
     # Python 3.11 adds typing.LiteralString, typing.Never, typing.Self
-    pass
+    cases.extend(
+        [
+            (typing.LiteralString, "LiteralString"),
+            (typing.Never, "Never"),
+            (typing.Self, "Self"),
+        ]
+    )
 
 
 @pytest.mark.parametrize("case", cases, ids=[c[1] for c in cases])
@@ -115,18 +125,36 @@ def test_typenames(case):
 
 
 def test_remove_modules():
-    def remove_modules(s: str):
-        config = TypenamesConfig()
-        for pattern in config.remove_modules_patterns:
-            s = pattern.sub("", s)
-        return s
+    class OtherModuleClass:
+        __qualname__ = "OtherModuleClass"
+        __module__ = "other_module"
 
-    assert remove_modules("typing.List[int]") == "List[int]"
-    assert remove_modules("typing.Any") == "Any"
-    assert remove_modules("collections.defaultdict") == "defaultdict"
-    assert remove_modules("collections.abc.Container") == "Container"
-    assert remove_modules("someothermodule.Container") == "someothermodule.Container"
-    assert remove_modules("typing_other.Container") == "typing_other.Container"
+    assert typenames(typing.Any) == "Any"
+    assert typenames(MyClass) == "tests.MyClass"
+    assert typenames(OtherModuleClass) == "other_module.OtherModuleClass"
+
+    # Override
+    config = TypenamesConfig(remove_modules=["tests"])
+    assert typenames(typing.Any, config=config) == "typing.Any"
+    assert typenames(MyClass, config=config) == "MyClass"
+    assert typenames(OtherModuleClass, config=config) == "other_module.OtherModuleClass"
+
+    # Add to defaults
+    config = TypenamesConfig(remove_modules=DEFAULT_REMOVE_MODULES + ["tests"])
+    assert typenames(typing.Any, config=config) == "Any"
+    assert typenames(MyClass, config=config) == "MyClass"
+    assert typenames(OtherModuleClass, config=config) == "other_module.OtherModuleClass"
+
+    # All types
+    config = TypenamesConfig(remove_modules=REMOVE_ALL_MODULES)
+    assert typenames(typing.Any, config=config) == "Any"
+    assert typenames(MyClass, config=config) == "MyClass"
+    assert typenames(OtherModuleClass, config=config) == "OtherModuleClass"
+    assert typenames(OtherModuleClass, config=config) == "OtherModuleClass"
+
+    if sys.version_info >= (3, 9):
+        assert typenames(collections.Counter[str], config=config) == "Counter[str]"
+        assert typenames(collections.abc.Sequence[str], config=config) == "Sequence[str]"
 
 
 def test_union_syntax_or_operator():
