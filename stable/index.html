@@ -1,0 +1,689 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="String representations of Python type annotations">
+      
+      
+      
+        <link rel="canonical" href="https://jayqi.github.io/typenames/v1.0.0/">
+      
+      
+      
+        <link rel="next" href="api-reference/">
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.13">
+    
+    
+      
+        <title>typenames</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ffa9267a.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="css/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#typenames-string-representations-of-type-annotations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="typenames" class="md-header__button md-logo" aria-label="typenames" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            typenames
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jayqi/typenames" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="typenames" class="md-nav__button md-logo" aria-label="typenames" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    typenames
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jayqi/typenames" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Home
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Home
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-use-this-library" class="md-nav__link">
+    Why use this library?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    Basic Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configurable-options" class="md-nav__link">
+    Configurable options
+  </a>
+  
+    <nav class="md-nav" aria-label="Configurable options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#union-syntax-union_syntax" class="md-nav__link">
+    Union Syntax (union_syntax)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-syntax-optional_syntax" class="md-nav__link">
+    Optional Syntax (optional_syntax)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standard-collection-syntax-standard_collection_syntax" class="md-nav__link">
+    Standard Collection Syntax (standard_collection_syntax)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-module-names-remove_modules" class="md-nav__link">
+    Removing Module Names (remove_modules)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api-reference/" class="md-nav__link">
+        API Reference
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="changelog/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-use-this-library" class="md-nav__link">
+    Why use this library?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    Basic Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configurable-options" class="md-nav__link">
+    Configurable options
+  </a>
+  
+    <nav class="md-nav" aria-label="Configurable options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#union-syntax-union_syntax" class="md-nav__link">
+    Union Syntax (union_syntax)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-syntax-optional_syntax" class="md-nav__link">
+    Optional Syntax (optional_syntax)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standard-collection-syntax-standard_collection_syntax" class="md-nav__link">
+    Standard Collection Syntax (standard_collection_syntax)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-module-names-remove_modules" class="md-nav__link">
+    Removing Module Names (remove_modules)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="typenames-string-representations-of-type-annotations">typenames : String representations of type annotations<a class="headerlink" href="#typenames-string-representations-of-type-annotations" title="Permanent link">&para;</a></h1>
+<p><a href="https://jayqi.github.io/typenames/"><img alt="Docs Status" src="https://img.shields.io/badge/docs-stable-informational" /></a>
+<a href="https://pypi.org/project/typenames/"><img alt="PyPI" src="https://img.shields.io/pypi/v/typenames.svg" /></a>
+<a href="https://pypi.org/project/typenames/"><img alt="Supported Python versions" src="https://img.shields.io/pypi/pyversions/typenames" /></a>
+<a href="https://github.com/jayqi/typenames/actions/workflows/tests.yml?query=branch%3Amain"><img alt="tests" src="https://github.com/jayqi/typenames/actions/workflows/tests.yml/badge.svg?branch=main" /></a>
+<a href="https://codecov.io/gh/jayqi/typenames"><img alt="codecov" src="https://codecov.io/gh/jayqi/typenames/branch/main/graph/badge.svg" /></a></p>
+<p><strong>typenames</strong> is a configurable Python library for creating string representations of type annotations. By default, it produces compact representations by removing standard library module names. Configurable options include standardizing on <code>|</code> operator syntax for unions or standard collections classes for generics.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">typenames</span> <span class="kn">import</span> <span class="n">typenames</span>
+
+<span class="n">typenames</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="c1">#&gt; &#39;int&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;dict[str, Any]&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span>
+<span class="c1">#&gt; &#39;str | int&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;Optional[str]&#39;</span>
+</code></pre></div>
+<h2 id="why-use-this-library">Why use this library?<a class="headerlink" href="#why-use-this-library" title="Permanent link">&para;</a></h2>
+<p>String representations of Python type objects, type aliases, and special typing forms are inconsistent and often verbose. Here are some comparisons using default settings against built-in string representations:</p>
+<table>
+<thead>
+<tr>
+<th align="center">Input</th>
+<th align="center">With <code>str(...)</code></th>
+<th align="center">With <code>typenames(...)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>int</code></td>
+<td align="center"><code>&lt;class 'int'&gt;</code></td>
+<td align="center"><code>int</code></td>
+</tr>
+<tr>
+<td align="center"><code>list</code></td>
+<td align="center"><code>&lt;class 'list'&gt;</code></td>
+<td align="center"><code>list</code></td>
+</tr>
+<tr>
+<td align="center"><code>typing.Optional[int]</code></td>
+<td align="center"><code>typing.Optional[int]</code></td>
+<td align="center"><code>Optional[int]</code></td>
+</tr>
+<tr>
+<td align="center"><code>collections.abc.Iterator[typing.Any]</code></td>
+<td align="center"><code>collections.abc.Iterator[typing.Any]</code></td>
+<td align="center"><code>Iterator[Any]</code></td>
+</tr>
+<tr>
+<td align="center"><code>typing.Literal[MyEnum.NAME]</code></td>
+<td align="center"><code>typing.Literal[&lt;MyEnum.NAME: 'value'&gt;]</code></td>
+<td align="center"><code>Literal[MyEnum.NAME]</code></td>
+</tr>
+</tbody>
+</table>
+<p>typenames also has handy configurable functionality, such as:</p>
+<ul>
+<li>Forcing standardization on <code>|</code> operator union syntax (e.g., <code>Union[int, str]</code> to <code>int | str</code>) or vice versa</li>
+<li>Forcing standardization on <code>|</code> operator optional syntax (e.g., <code>Optional[int]</code> to <code>int | None</code>) or vice versa</li>
+<li>Forcing standardization on standard collection types for generics (e.g., <code>List[int]</code> to <code>list[int]</code>) or vice versa</li>
+<li>Controlling exactly which module names to remove using regex patterns.</li>
+</ul>
+<p>No need for string manipulation to get what you want!</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p>typenames is available on PyPI:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>typenames
+</code></pre></div>
+<h2 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
+<p>The main way to use the library is the <code>typenames</code> function. Calling it on a type annotation renders a string representation:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">typenames</span> <span class="kn">import</span> <span class="n">typenames</span>
+
+<span class="n">typenames</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="c1">#&gt; &#39;int&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;Optional[str]&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]])</span>
+<span class="c1">#&gt; &#39;Callable[[int], tuple[str, ...]]</span>
+</code></pre></div>
+<p>Under the hood, typenames parses a type annotation as a tree structure. If you need to see the parsed tree, use the <code>parse_type_tree</code> function to return the root node. You can get the rendered string representation by calling <code>str(...)</code> on root node.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">typenames</span> <span class="kn">import</span> <span class="n">parse_type_tree</span>
+
+<span class="n">tree</span> <span class="o">=</span> <span class="n">parse_type_tree</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]])</span>
+<span class="n">tree</span>
+<span class="c1">#&gt; &lt;GenericNode typing.Union[&lt;TypeNode typing.Any&gt;, &lt;GenericNode &lt;class &#39;list&#39;&gt;[&lt;TypeNode typing.Any&gt;]&gt;]&gt;</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="c1">#&gt; &#39;Union[Any, list[Any]]&#39;</span>
+</code></pre></div>
+<h2 id="configurable-options">Configurable options<a class="headerlink" href="#configurable-options" title="Permanent link">&para;</a></h2>
+<p>All configuration options can be passed as keyword arguments to either the <code>typenames</code> or <code>parse_type_tree</code> functions.</p>
+<h3 id="union-syntax-union_syntax">Union Syntax (<code>union_syntax</code>)<a class="headerlink" href="#union-syntax-union_syntax" title="Permanent link">&para;</a></h3>
+<p>This option controls how unions are rendered. It supports both the <code>typing.Union</code> special form and the <code>|</code> operator (bitwise or) syntax from <a href="https://peps.python.org/pep-0604/">PEP 604</a>. Valid options are defined by the enum <code>UnionSyntax</code> and include:</p>
+<ul>
+<li><strong><code>"as_given"</code> (default)</strong>: render the union as it is given without changing syntax.</li>
+<li><strong><code>"or_operator"</code></strong>: render all type unions using the <code>|</code> operator.</li>
+<li><strong><code>"special_form"</code></strong>: render all type unions using the <code>typing.Union</code> special form.</li>
+</ul>
+<p>Note that runtime use of the <code>|</code> operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for the <code>|</code> operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+<p><strong>Limitations:</strong> Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of <code>|</code> operator syntax and any typing module types will result in a <code>typing.Union</code> union, so <code>as_given</code> will always render such inputs with <code>typing.Union</code>.</p>
+<h3 id="optional-syntax-optional_syntax">Optional Syntax (<code>optional_syntax</code>)<a class="headerlink" href="#optional-syntax-optional_syntax" title="Permanent link">&para;</a></h3>
+<p>This option controls how optional types are rendered. It supports both the <code>typing.Optional</code> special form and the <code>|</code> operator (bitwise or) syntax from <a href="https://peps.python.org/pep-0604/">PEP 604</a>. Valid options are defined by the enum <code>OptionalSyntax</code> and include:</p>
+<ul>
+<li><strong><code>"as_given"</code> (default)</strong>: render the optional type as it is given without changing syntax</li>
+<li><strong><code>"or_operator"</code></strong>: render all optional types using the <code>|</code> operator</li>
+<li><strong><code>"union_special_form"</code></strong>: render all optional types using the <code>typing.Optional</code> special form</li>
+<li><strong><code>"optional_special_form"</code></strong>: render all optional types using the <code>typing.Optional</code> special form</li>
+</ul>
+<p>Note that runtime use of the <code>|</code> operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for the <code>|</code> operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+<p><strong>Limitations:</strong></p>
+<ul>
+<li>Python automatically converts <code>typing.Union[..., None]</code> to <code>typing.Optional[...]</code> when evaluating at runtime. Since typenames uses runtime type objects, it will only see the result using <code>typing.Optional</code> and not know the form of your original input.</li>
+<li>Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of <code>|</code> operator syntax and any typing module types will result in a <code>typing.Union</code> union, so <code>as_given</code> will always render such inputs with typing module special forms.</li>
+<li>The <code>typing.Optional</code> special form only accepts exactly one parameter. By default, typenames will render cases with multiple parameters with <code>Optional[Union[...]]</code>. You can use the <code>union_syntax</code> option to control the inner union's syntax.</li>
+</ul>
+<h3 id="standard-collection-syntax-standard_collection_syntax">Standard Collection Syntax (<code>standard_collection_syntax</code>)<a class="headerlink" href="#standard-collection-syntax-standard_collection_syntax" title="Permanent link">&para;</a></h3>
+<p>This option controls how parameterized standard collection generic types are rendered. It supports both the typing module's generic aliases (e.g., <code>typing.List[...]</code>) and the standard class (e.g., <code>list[...]</code>) syntax from <a href="https://peps.python.org/pep-0585/">PEP 585</a>. Valid options are defined by the enum <code>StandardCollectionSyntax</code> and include:</p>
+<ul>
+<li><strong><code>"as_given"</code> (default)</strong>: render the parameterized generic type as it is given without changing syntax</li>
+<li><strong><code>"standard_class"</code></strong>: render all parameterized standard collection generic types using their class</li>
+<li><strong><code>"typing_module"</code></strong>: render all parameterized standard collection generic types using the typing module's generic alias</li>
+</ul>
+<p>Note that runtime use of standard collection classes as parameterized generic types is new in Python 3.9. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for standard collection classes for parameterized generic types is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+<h3 id="removing-module-names-remove_modules">Removing Module Names (<code>remove_modules</code>)<a class="headerlink" href="#removing-module-names-remove_modules" title="Permanent link">&para;</a></h3>
+<p>This option controls how module names are removed from the rendered output. It takes a list of inputs, which can either be a string of the module name or a <code>re.Pattern</code> regex pattern directly (the result of <code>re.compile</code>). String inputs are templated into the following regex pattern:</p>
+<div class="highlight"><pre><span></span><code><span class="n">module</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Given module name</span>
+<span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^</span><span class="si">{}</span><span class="s2">\.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\.&quot;</span><span class="p">)))</span>
+</code></pre></div>
+<p>Note that module names are removed in the given order, so having entries that are submodules of other entries can potentially lead to the wrong behavior. You can either order them from higher-depth to lower-depth, or directly provide a compiled pattern with optional groups. For example, the pattern <code>re.compile(r"^collections\.(abc\.)?")</code> will match both <code>"collections."</code> and <code>"collections.abc."</code>.</p>
+<p>The default list of module names include the standard library modules relevant to <a href="https://peps.python.org/pep-0585/">PEP 585</a> plus <code>types</code> and <code>typing</code>. It can be accessed at <code>DEFAULT_REMOVE_MODULES</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">DEFAULT_REMOVE_MODULES</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;__main__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;builtins&quot;</span><span class="p">,</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^collections\.(abc\.)?&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;contextlib&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;re&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;types&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;typing&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+<p>If you are trying to <em>add</em> additional modules to this option (rather than overriding the defaults), the easiest way to do so is to concatenate with the default list:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typenames</span> <span class="kn">import</span> <span class="n">typenames</span><span class="p">,</span> <span class="n">DEFAULT_REMOVE_MODULES</span><span class="p">,</span> <span class="n">BaseNode</span>
+
+<span class="n">typenames</span><span class="p">(</span><span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;Optional[typenames.BaseNode]&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">],</span> <span class="n">remove_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;typenames&quot;</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;typing.Optional[BaseNode]&#39;</span>
+<span class="n">typenames</span><span class="p">(</span>
+    <span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">],</span>
+    <span class="n">remove_modules</span><span class="o">=</span><span class="n">DEFAULT_REMOVE_MODULES</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;typenames&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="c1">#&gt; &#39;Optional[BaseNode]&#39;</span>
+</code></pre></div>
+<p>To remove all module names, you can use <code>REMOVE_ALL_MODULES</code>, which contains the pattern <code>re.compile(r"^(\w+\.)+")</code>.</p>
+<hr />
+<p><sup>Reproducible examples created by <a href="https://github.com/jayqi/reprexlite">reprexlite</a>.</sup></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "stable", "provider": "mike"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.2a6f1dda.min.js"></script>
+      
+    
+  </body>
+</html>
