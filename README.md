@@ -53,7 +53,7 @@ pip install typenames
 
 ## Basic Usage
 
-The main way to use the library is the `typenames` function. Calling it on a type annotation produces string annotations
+The main way to use the library is the `typenames` function. Calling it on a type annotation renders a string representation:
 
 ```python
 import typing
@@ -67,7 +67,7 @@ typenames(collections.abc.Callable[[int], tuple[str, ...]])
 #> 'Callable[[int], tuple[str, ...]]
 ```
 
-Under the hood, typenames parses a type annotation as a tree structure. If you need to see the parsed tree, using the `parse_type_tree` function. You can get the rendered string representation by calling `str(...)` on the parsed tree.
+Under the hood, typenames parses a type annotation as a tree structure. If you need to see the parsed tree, use the `parse_type_tree` function to return the root node. You can get the rendered string representation by calling `str(...)` on root node.
 
 ```python
 import typing
