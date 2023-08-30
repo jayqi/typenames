@@ -2,17 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://jayqi.github.io/typenames/~latest/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-30</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://jayqi.github.io/typenames/~latest/api-reference/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-30</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://jayqi.github.io/typenames/~latest/changelog/</loc>
-         <lastmod>2023-08-15</lastmod>
+         <lastmod>2023-08-30</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
