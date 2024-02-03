@@ -60,6 +60,8 @@ plugins:
             show_signature_annotations: true
             # Additional options
             show_source: true
+  - mike:
+      canonical_version: stable
 
 extra:
   version:
