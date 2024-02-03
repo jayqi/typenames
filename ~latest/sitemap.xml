@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://jayqi.github.io/typenames/~latest/</loc>
+         <loc>https://jayqi.github.io/typenames/stable/</loc>
          <lastmod>2024-02-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://jayqi.github.io/typenames/~latest/api-reference/</loc>
+         <loc>https://jayqi.github.io/typenames/stable/api-reference/</loc>
          <lastmod>2024-02-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://jayqi.github.io/typenames/~latest/changelog/</loc>
+         <loc>https://jayqi.github.io/typenames/stable/changelog/</loc>
          <lastmod>2024-02-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
