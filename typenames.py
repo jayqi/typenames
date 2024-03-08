@@ -15,7 +15,7 @@ except ImportError:
     from typing_extensions import get_args, get_origin  # type: ignore # Python 3.7
 
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 OR_OPERATOR_SUPPORTED = sys.version_info >= (3, 10)
 """Flag for whether PEP 604's | operator (bitwise or) between types is supported."""
