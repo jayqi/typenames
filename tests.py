@@ -39,6 +39,12 @@ class MyEnum(enum.Enum):
     MEMBER2 = "member2"
 
 
+class MyTypedDict(typing.TypedDict):
+    x: int
+    y: int
+    label: str
+
+
 cases = [
     (int, "int"),
     (typing.List[int], "List[int]"),
@@ -62,23 +68,12 @@ cases = [
     (typing.List["enum.Enum"], "List[enum.Enum]"),
     (typing.List["MyClass"], "List[MyClass]"),
     (typing.List["OuterClass.InnerClass"], "List[OuterClass.InnerClass]"),
+    # Python 3.8 adds typing.Literal, typing.Final, typing.TypedDict
+    (typing.Literal["s", 0, MyEnum.MEMBER1], "Literal['s', 0, MyEnum.MEMBER1]"),
+    (typing.Final[int], "Final[int]"),
+    (MyTypedDict, "tests.MyTypedDict"),
 ]
 
-if sys.version_info >= (3, 8):
-    # Python 3.8 adds typing.Literal, typing.Final, typing.TypedDict
-
-    class MyTypedDict(typing.TypedDict):
-        x: int
-        y: int
-        label: str
-
-    cases.extend(
-        [
-            (typing.Literal["s", 0, MyEnum.MEMBER1], "Literal['s', 0, MyEnum.MEMBER1]"),
-            (typing.Final[int], "Final[int]"),
-            (MyTypedDict, "tests.MyTypedDict"),
-        ]
-    )
 
 if sys.version_info >= (3, 9):
     # Python 3.9 adds use of standard collection types as a generic in type annotations (PEP 585),
@@ -264,12 +259,10 @@ def test_node_repr():
         repr(parse_type_tree(typing.Optional[int]))
         == "<GenericNode typing.Union[<TypeNode <class 'int'>>, <TypeNode <class 'NoneType'>>]>"
     )
-
-    if sys.version_info >= (3, 8):
-        assert (
-            repr(parse_type_tree(typing.Literal["a", "b"]))
-            == "<GenericNode typing.Literal[<LiteralNode 'a'>, <LiteralNode 'b'>]>"
-        )
+    assert (
+        repr(parse_type_tree(typing.Literal["a", "b"]))
+        == "<GenericNode typing.Literal[<LiteralNode 'a'>, <LiteralNode 'b'>]>"
+    )
 
 
 is_union_special_form_cases = [
