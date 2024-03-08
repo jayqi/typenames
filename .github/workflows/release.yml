@@ -20,16 +20,16 @@ jobs:
 
       - name: Install hatch
         run: |
-          pip install hatch
+          pipx install hatch
 
       - name: Check that versions match
         id: version
         run: |
           echo "Release tag: [${{ github.event.release.tag_name }}]"
-          PACKAGE_VERSION=$(python -c "import typenames; print(typenames.__version__)")
+          PACKAGE_VERSION=$(hatch version)
           echo "Package version: [$PACKAGE_VERSION]"
           [ ${{ github.event.release.tag_name }} == "v$PACKAGE_VERSION" ] || { exit 1; }
-          echo "::set-output name=major_minor_version::v${PACKAGE_VERSION%.*}"
+          echo "major_minor_version=v${PACKAGE_VERSION%.*}" >> $GITHUB_OUTPUT
 
       - name: Build package
         run: |
