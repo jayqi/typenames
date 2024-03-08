@@ -167,7 +167,7 @@ typenames(
 #> 'Optional[BaseNode]'
 ```
 
-To remove all module names, you can use `REMOVE_ALL_MODULES`, which contains the pattern `re.compile(r"^(\w+\.)+")`.
+To remove all module names, you can use `REMOVE_ALL_MODULES`, which contains the pattern `re.compile(r"^(<?\w+>?\.)+")`.
 
 ---
 

@@ -15,7 +15,7 @@ except ImportError:
     from typing_extensions import get_args, get_origin  # type: ignore # Python 3.7
 
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 OR_OPERATOR_SUPPORTED = sys.version_info >= (3, 10)
 """Flag for whether PEP 604's | operator (bitwise or) between types is supported."""
@@ -65,7 +65,7 @@ DEFAULT_REMOVE_MODULES: List[Union[str, re.Pattern]] = [
 ]
 """List of standard library modules used as the default value for the remove_modules option."""
 
-REMOVE_ALL_MODULES = [re.compile(r"^(\w+\.)+")]
+REMOVE_ALL_MODULES = [re.compile(r"^(<?\w+>?\.)+")]
 
 
 @dataclasses.dataclass
