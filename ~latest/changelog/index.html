@@ -437,7 +437,9 @@
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
 <h2 id="v110-2024-03-08">v1.1.0 (2024-03-08)<a class="headerlink" href="#v110-2024-03-08" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Changed <code>REMOVE_ALL_MODULES</code>'s regex pattern to also remove <code>&lt;locals&gt;</code> from rendered output. <code>&lt;locals&gt;</code> typically appears in a type's qualified name if the type was defined within the local scope of a function or class method. </li>
+<li>Changed <code>REMOVE_ALL_MODULES</code>'s regex pattern to also remove <code>&lt;locals&gt;</code> from rendered output. <code>&lt;locals&gt;</code> typically appears in a type's qualified name if the type was defined within the local scope of a function or class method. (<a href="https://github.com/jayqi/typenames/pull/4">PR #4</a>)</li>
+<li>Removed support for Python 3.7. (<a href="https://github.com/jayqi/typenames/pull/5">PR #5</a>)</li>
+<li>Deprecated <code>LITERAL_TYPE_SUPPORTED</code> flag, since typenames no longer supports Python versions where this is false. (<a href="https://github.com/jayqi/typenames/pull/5">PR #5</a>)</li>
 </ul>
 <h2 id="v100-2023-02-20">v1.0.0 (2023-02-20)<a class="headerlink" href="#v100-2023-02-20" title="Permanent link">&para;</a></h2>
 <p>Initial release! 🎉</p>
