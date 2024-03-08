@@ -65,7 +65,7 @@ DEFAULT_REMOVE_MODULES: List[Union[str, re.Pattern]] = [
 ]
 """List of standard library modules used as the default value for the remove_modules option."""
 
-REMOVE_ALL_MODULES = [re.compile(r"^(\w+\.)+")]
+REMOVE_ALL_MODULES = [re.compile(r"^(<?\w+>?\.)+")]
 
 
 @dataclasses.dataclass

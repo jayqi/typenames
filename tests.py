@@ -125,32 +125,41 @@ def test_typenames(case):
 
 
 def test_remove_modules():
+    # Simulate a class from another module
     class OtherModuleClass:
         __qualname__ = "OtherModuleClass"
         __module__ = "other_module"
 
+    # Class defined in a function scope
+    class FnScopeClass: ...
+
+    # Default removal
     assert typenames(typing.Any) == "Any"
     assert typenames(MyClass) == "tests.MyClass"
     assert typenames(OtherModuleClass) == "other_module.OtherModuleClass"
+    assert typenames(FnScopeClass) == "tests.test_remove_modules.<locals>.FnScopeClass"
 
     # Override
     config = TypenamesConfig(remove_modules=["tests"])
     assert typenames(typing.Any, config=config) == "typing.Any"
     assert typenames(MyClass, config=config) == "MyClass"
     assert typenames(OtherModuleClass, config=config) == "other_module.OtherModuleClass"
+    assert typenames(FnScopeClass, config=config) == "test_remove_modules.<locals>.FnScopeClass"
 
     # Add to defaults
     config = TypenamesConfig(remove_modules=DEFAULT_REMOVE_MODULES + ["tests"])
     assert typenames(typing.Any, config=config) == "Any"
     assert typenames(MyClass, config=config) == "MyClass"
     assert typenames(OtherModuleClass, config=config) == "other_module.OtherModuleClass"
+    assert typenames(FnScopeClass, config=config) == "test_remove_modules.<locals>.FnScopeClass"
 
-    # All types
+    # All modules
     config = TypenamesConfig(remove_modules=REMOVE_ALL_MODULES)
     assert typenames(typing.Any, config=config) == "Any"
     assert typenames(MyClass, config=config) == "MyClass"
     assert typenames(OtherModuleClass, config=config) == "OtherModuleClass"
     assert typenames(OtherModuleClass, config=config) == "OtherModuleClass"
+    assert typenames(FnScopeClass, config=config) == "FnScopeClass"
 
     if sys.version_info >= (3, 9):
         assert typenames(collections.Counter[str], config=config) == "Counter[str]"
