@@ -7,13 +7,7 @@ import re
 import sys
 import types
 import typing
-from typing import Any, List, Optional, Union
-
-try:
-    from typing import get_args, get_origin  # type: ignore # Python 3.8+
-except ImportError:
-    from typing_extensions import get_args, get_origin  # type: ignore # Python 3.7
-
+from typing import Any, List, Optional, Union, get_args, get_origin
 
 __version__ = "1.1.0"
 
@@ -21,7 +15,9 @@ OR_OPERATOR_SUPPORTED = sys.version_info >= (3, 10)
 """Flag for whether PEP 604's | operator (bitwise or) between types is supported."""
 
 LITERAL_TYPE_SUPPORTED = sys.version_info >= (3, 8)
-"""Flag for whether PEP 586's typing.Literal is supported."""
+"""(DEPRECATED) Flag for whether PEP 586's typing.Literal is supported. typenames no longer 
+supports Python versions where this is false.
+"""
 
 
 T = typing.TypeVar("T", bound=type)
