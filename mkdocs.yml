@@ -61,6 +61,7 @@ plugins:
             # Additional options
             show_source: true
   - mike:
+      alias_type: copy
       canonical_version: stable
 
 extra:
