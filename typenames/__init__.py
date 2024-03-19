@@ -9,7 +9,7 @@ import types
 import typing
 from typing import Any, List, Optional, Union, get_args, get_origin
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 OR_OPERATOR_SUPPORTED = sys.version_info >= (3, 10)
 """Flag for whether PEP 604's | operator (bitwise or) between types is supported."""
@@ -19,8 +19,13 @@ LITERAL_TYPE_SUPPORTED = sys.version_info >= (3, 8)
 supports Python versions where this is false.
 """
 
-
-T = typing.TypeVar("T", bound=type)
+# TypeVar for type annotations
+# Most typing special forms have type 'object'
+# There is a stalled proposal for TypeForm: https://github.com/python/mypy/issues/9773
+if sys.version_info >= (3, 10):
+    _TypeForm = typing.TypeVar("_TypeForm", bound=type | types.UnionType | object)
+else:
+    _TypeForm = typing.TypeVar("_TypeForm", bound=typing.Union[type, object])
 
 
 class UnionSyntax(str, Enum):
@@ -71,7 +76,9 @@ class TypenamesConfig:
 
     union_syntax: UnionSyntax = UnionSyntax.AS_GIVEN
     optional_syntax: OptionalSyntax = OptionalSyntax.AS_GIVEN
-    standard_collection_syntax: StandardCollectionSyntax = StandardCollectionSyntax.AS_GIVEN
+    standard_collection_syntax: StandardCollectionSyntax = (
+        StandardCollectionSyntax.AS_GIVEN
+    )
     remove_modules: List[Union[str, re.Pattern]] = dataclasses.field(
         default_factory=lambda: list(DEFAULT_REMOVE_MODULES)
     )
@@ -79,7 +86,9 @@ class TypenamesConfig:
     def __post_init__(self):
         self.union_syntax = UnionSyntax(self.union_syntax)
         self.optional_syntax = OptionalSyntax(self.optional_syntax)
-        self.standard_collection_syntax = StandardCollectionSyntax(self.standard_collection_syntax)
+        self.standard_collection_syntax = StandardCollectionSyntax(
+            self.standard_collection_syntax
+        )
 
     @property
     def remove_modules_patterns(self) -> typing.Iterator[re.Pattern]:
@@ -93,10 +102,10 @@ class TypenamesConfig:
 
 
 @dataclasses.dataclass(repr=False)
-class BaseNode(abc.ABC, typing.Generic[T]):
+class BaseNode(abc.ABC, typing.Generic[_TypeForm]):
     """Abstract base class for a typenames node."""
 
-    tp: typing.Type[T]
+    tp: _TypeForm
     config: TypenamesConfig
 
     @property
@@ -191,9 +200,7 @@ class GenericNode(BaseNode):
                         # need to use a union inside
                         arg_nodes = [
                             GenericNode(
-                                tp=typing.Union[  # type: ignore[arg-type]
-                                    tuple(a.tp for a in arg_nodes)
-                                ],
+                                tp=typing.Union[tuple(a.tp for a in arg_nodes)],  # type: ignore[arg-type]
                                 config=self.config,
                                 origin=typing.Union,
                                 arg_nodes=arg_nodes,
@@ -211,7 +218,10 @@ class GenericNode(BaseNode):
         elif is_union_or_operator(self.tp):
             is_optional = any(a.is_none_type for a in arg_nodes)
             # Case: ... | None (optional) and configured to use typing.Optional
-            if is_optional and self.config.optional_syntax == OptionalSyntax.OPTIONAL_SPECIAL_FORM:
+            if (
+                is_optional
+                and self.config.optional_syntax == OptionalSyntax.OPTIONAL_SPECIAL_FORM
+            ):
                 origin_module_prefix = "typing."
                 origin_name = "Optional"
                 arg_nodes = [a for a in arg_nodes if a.tp is not type(None)]
@@ -220,16 +230,17 @@ class GenericNode(BaseNode):
                     # need to use a union inside
                     arg_nodes = [
                         GenericNode(
-                            tp=typing.Union[  # type: ignore[arg-type]
-                                tuple(a.tp for a in arg_nodes)
-                            ],
+                            tp=typing.Union[tuple(a.tp for a in arg_nodes)],  # type: ignore[arg-type]
                             config=self.config,
                             origin=typing.Union,
                             arg_nodes=arg_nodes,
                         )
                     ]
             # Case: ... | None (optional) and configured to use typing.Union
-            elif is_optional and self.config.optional_syntax == OptionalSyntax.UNION_SPECIAL_FORM:
+            elif (
+                is_optional
+                and self.config.optional_syntax == OptionalSyntax.UNION_SPECIAL_FORM
+            ):
                 origin_module_prefix = "typing."
                 origin_name = "Union"
             # Case: regular union
@@ -241,9 +252,12 @@ class GenericNode(BaseNode):
                     return " | ".join(str(a) for a in arg_nodes)
         # Case: Standard collection class alias
         elif is_standard_collection_type_alias(self.tp):
-            if self.config.standard_collection_syntax == StandardCollectionSyntax.TYPING_MODULE:
+            if (
+                self.config.standard_collection_syntax
+                == StandardCollectionSyntax.TYPING_MODULE
+            ):
                 typing_alias = STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING[
-                    get_origin(self.tp)  # type: ignore
+                    get_origin(self.tp)
                 ]
                 origin_module_prefix = "typing."
                 origin_name = f"{typing_alias._name}"  # type: ignore
@@ -252,7 +266,10 @@ class GenericNode(BaseNode):
                 origin_name = self.origin.__qualname__  # type: ignore[union-attr]
         # Case: Typing module collection alias
         elif is_typing_module_collection_alias(self.tp):
-            if self.config.standard_collection_syntax == StandardCollectionSyntax.STANDARD_CLASS:
+            if (
+                self.config.standard_collection_syntax
+                == StandardCollectionSyntax.STANDARD_CLASS
+            ):
                 origin_module_prefix = self.origin.__module__ + "."
                 origin_name = self.origin.__qualname__  # type: ignore[union-attr]
             else:
@@ -300,7 +317,8 @@ class ParamsListNode(BaseNode):
 @dataclasses.dataclass(repr=False)
 class LiteralNode(BaseNode):
     """Node that represents a literal value. Used for the arguments of Literal. Valid types for
-    a literal value include ints, byte strings, unicode strings, bools, Enum values, None."""
+    a literal value include ints, byte strings, unicode strings, bools, Enum values, None.
+    """
 
     @property
     def is_none_type(self) -> typing.NoReturn:
@@ -316,7 +334,9 @@ class LiteralNode(BaseNode):
             return repr(self.tp)
 
 
-def parse_type_tree(tp: type, config: Optional[TypenamesConfig] = None, **kwargs: Any) -> BaseNode:
+def parse_type_tree(
+    tp: _TypeForm, config: Optional[TypenamesConfig] = None, **kwargs: Any
+) -> BaseNode:
     """Parses a given type annotation into a tree data structure.
 
     Args:
@@ -346,7 +366,9 @@ def parse_type_tree(tp: type, config: Optional[TypenamesConfig] = None, **kwargs
         )
     elif isinstance(tp, list):
         # This is the parameter list for Callable
-        node = ParamsListNode(tp=tp, arg_nodes=[parse_type_tree(a) for a in tp], config=config)
+        node = ParamsListNode(
+            tp=tp, arg_nodes=[parse_type_tree(a) for a in tp], config=config
+        )
     elif isinstance(tp, (int, bytes, str, Enum, bool)) or tp is None:
         node = LiteralNode(tp=tp, config=config)
     else:
@@ -354,7 +376,9 @@ def parse_type_tree(tp: type, config: Optional[TypenamesConfig] = None, **kwargs
     return node
 
 
-def typenames(tp: type, config: Optional[TypenamesConfig] = None, **kwargs: Any) -> str:
+def typenames(
+    tp: _TypeForm, config: Optional[TypenamesConfig] = None, **kwargs: Any
+) -> str:
     """Render a string representation of a type annotation.
 
     Args:
@@ -371,19 +395,17 @@ def typenames(tp: type, config: Optional[TypenamesConfig] = None, **kwargs: Any)
     return str(tree)
 
 
-def is_union_special_form(tp: type) -> bool:
+def is_union_special_form(tp: _TypeForm) -> bool:
     """Check if type annotation is a union and uses the typing.Union special form."""
     return get_origin(tp) is typing.Union
 
 
-def is_union_or_operator(tp: type) -> bool:
+def is_union_or_operator(tp: _TypeForm) -> bool:
     """Check if type annotation is a union and uses | operator (bitwise or)."""
     return OR_OPERATOR_SUPPORTED and isinstance(tp, types.UnionType)
 
 
-STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING: typing.Dict[  # type: ignore[name-defined]
-    type, typing._GenericAlias
-] = {
+STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING = {
     # builtins module
     dict: typing.Dict,
     list: typing.List,
@@ -408,7 +430,7 @@ STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING: typing.Dict[  # type: ignore[name-d
     collections.abc.Reversible: typing.Reversible,
     collections.abc.Collection: typing.Collection,
     collections.abc.Container: typing.Container,
-    collections.abc.Callable: typing.Callable,  # type: ignore[dict-item]
+    collections.abc.Callable: typing.Callable,
     collections.abc.Set: typing.AbstractSet,
     collections.abc.MutableSet: typing.MutableSet,
     collections.abc.Mapping: typing.Mapping,
@@ -430,7 +452,7 @@ STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING: typing.Dict[  # type: ignore[name-d
 """Mapping from standard collection types that support use as a generic type starting in
 Python 3.9 (PEP 585) to their associated typing module generic alias."""
 
-STANDARD_COLLECTION_CLASSES: typing.FrozenSet[type] = frozenset(
+STANDARD_COLLECTION_CLASSES = frozenset(
     STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING.keys()
 )
 """Frozenset of standard collection classes that support use as a generic type starting in
@@ -441,8 +463,7 @@ def is_standard_collection_type_alias(tp: type) -> bool:
     """Check if type annotation is a generic type and uses a standard collection type as a generic
     alias."""
     return (
-        get_origin(tp) in STANDARD_COLLECTION_CLASSES
-        and type(tp) is not typing._GenericAlias  # type: ignore[attr-defined]
+        get_origin(tp) in STANDARD_COLLECTION_CLASSES and type(tp) is not typing._GenericAlias  # type: ignore[attr-defined]
     )
 
 
@@ -450,6 +471,5 @@ def is_typing_module_collection_alias(tp: type) -> bool:
     """Check if type annotation is a generic type and uses a typing module collection generic
     alias, e.g., typing.List."""
     return (
-        get_origin(tp) in STANDARD_COLLECTION_CLASSES
-        and type(tp) is typing._GenericAlias  # type: ignore[attr-defined]
+        get_origin(tp) in STANDARD_COLLECTION_CLASSES and type(tp) is typing._GenericAlias  # type: ignore[attr-defined]
     )
