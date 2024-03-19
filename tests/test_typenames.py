@@ -126,8 +126,7 @@ def test_remove_modules():
         __module__ = "other_module"
 
     # Class defined in a function scope
-    class FnScopeClass:
-        ...
+    class FnScopeClass: ...
 
     # Default removal
     assert typenames(typing.Any) == "Any"

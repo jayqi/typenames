@@ -76,9 +76,7 @@ class TypenamesConfig:
 
     union_syntax: UnionSyntax = UnionSyntax.AS_GIVEN
     optional_syntax: OptionalSyntax = OptionalSyntax.AS_GIVEN
-    standard_collection_syntax: StandardCollectionSyntax = (
-        StandardCollectionSyntax.AS_GIVEN
-    )
+    standard_collection_syntax: StandardCollectionSyntax = StandardCollectionSyntax.AS_GIVEN
     remove_modules: List[Union[str, re.Pattern]] = dataclasses.field(
         default_factory=lambda: list(DEFAULT_REMOVE_MODULES)
     )
@@ -86,9 +84,7 @@ class TypenamesConfig:
     def __post_init__(self):
         self.union_syntax = UnionSyntax(self.union_syntax)
         self.optional_syntax = OptionalSyntax(self.optional_syntax)
-        self.standard_collection_syntax = StandardCollectionSyntax(
-            self.standard_collection_syntax
-        )
+        self.standard_collection_syntax = StandardCollectionSyntax(self.standard_collection_syntax)
 
     @property
     def remove_modules_patterns(self) -> typing.Iterator[re.Pattern]:
@@ -218,10 +214,7 @@ class GenericNode(BaseNode):
         elif is_union_or_operator(self.tp):
             is_optional = any(a.is_none_type for a in arg_nodes)
             # Case: ... | None (optional) and configured to use typing.Optional
-            if (
-                is_optional
-                and self.config.optional_syntax == OptionalSyntax.OPTIONAL_SPECIAL_FORM
-            ):
+            if is_optional and self.config.optional_syntax == OptionalSyntax.OPTIONAL_SPECIAL_FORM:
                 origin_module_prefix = "typing."
                 origin_name = "Optional"
                 arg_nodes = [a for a in arg_nodes if a.tp is not type(None)]
@@ -237,10 +230,7 @@ class GenericNode(BaseNode):
                         )
                     ]
             # Case: ... | None (optional) and configured to use typing.Union
-            elif (
-                is_optional
-                and self.config.optional_syntax == OptionalSyntax.UNION_SPECIAL_FORM
-            ):
+            elif is_optional and self.config.optional_syntax == OptionalSyntax.UNION_SPECIAL_FORM:
                 origin_module_prefix = "typing."
                 origin_name = "Union"
             # Case: regular union
@@ -252,13 +242,8 @@ class GenericNode(BaseNode):
                     return " | ".join(str(a) for a in arg_nodes)
         # Case: Standard collection class alias
         elif is_standard_collection_type_alias(self.tp):
-            if (
-                self.config.standard_collection_syntax
-                == StandardCollectionSyntax.TYPING_MODULE
-            ):
-                typing_alias = STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING[
-                    get_origin(self.tp)
-                ]
+            if self.config.standard_collection_syntax == StandardCollectionSyntax.TYPING_MODULE:
+                typing_alias = STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING[get_origin(self.tp)]
                 origin_module_prefix = "typing."
                 origin_name = f"{typing_alias._name}"  # type: ignore
             else:
@@ -266,10 +251,7 @@ class GenericNode(BaseNode):
                 origin_name = self.origin.__qualname__  # type: ignore[union-attr]
         # Case: Typing module collection alias
         elif is_typing_module_collection_alias(self.tp):
-            if (
-                self.config.standard_collection_syntax
-                == StandardCollectionSyntax.STANDARD_CLASS
-            ):
+            if self.config.standard_collection_syntax == StandardCollectionSyntax.STANDARD_CLASS:
                 origin_module_prefix = self.origin.__module__ + "."
                 origin_name = self.origin.__qualname__  # type: ignore[union-attr]
             else:
@@ -366,9 +348,7 @@ def parse_type_tree(
         )
     elif isinstance(tp, list):
         # This is the parameter list for Callable
-        node = ParamsListNode(
-            tp=tp, arg_nodes=[parse_type_tree(a) for a in tp], config=config
-        )
+        node = ParamsListNode(tp=tp, arg_nodes=[parse_type_tree(a) for a in tp], config=config)
     elif isinstance(tp, (int, bytes, str, Enum, bool)) or tp is None:
         node = LiteralNode(tp=tp, config=config)
     else:
@@ -376,9 +356,7 @@ def parse_type_tree(
     return node
 
 
-def typenames(
-    tp: _TypeForm, config: Optional[TypenamesConfig] = None, **kwargs: Any
-) -> str:
+def typenames(tp: _TypeForm, config: Optional[TypenamesConfig] = None, **kwargs: Any) -> str:
     """Render a string representation of a type annotation.
 
     Args:
@@ -452,9 +430,7 @@ STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING = {
 """Mapping from standard collection types that support use as a generic type starting in
 Python 3.9 (PEP 585) to their associated typing module generic alias."""
 
-STANDARD_COLLECTION_CLASSES = frozenset(
-    STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING.keys()
-)
+STANDARD_COLLECTION_CLASSES = frozenset(STANDARD_COLLECTION_TO_TYPING_ALIAS_MAPPING.keys())
 """Frozenset of standard collection classes that support use as a generic type starting in
 Python 3.9 (PEP 585)."""
 
