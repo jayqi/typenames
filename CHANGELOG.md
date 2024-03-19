@@ -2,8 +2,8 @@
 
 ## v1.2.0 (2024-03-19)
 
-- Fixed the type signatures of `typenames` and `parse_type_tree` to reflect the typing of input type annotations, according to static type checkers.
-- Added [PEP 561 `py.typed` marker file](https://peps.python.org/pep-0561/#packaging-type-information) to indicate that the package supports type checking. 
+- Fixed the type signatures of `typenames` and `parse_type_tree` to reflect the typing of input type annotations, according to static type checkers. ([PR #6](https://github.com/jayqi/typenames/pull/6))
+- Added [PEP 561 `py.typed` marker file](https://peps.python.org/pep-0561/#packaging-type-information) to indicate that the package supports type checking. ([PR #6](https://github.com/jayqi/typenames/pull/6))
 
 ## v1.1.0 (2024-03-08)
 
