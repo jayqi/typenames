@@ -35,26 +35,22 @@ tests = ["pytest>=6"]
 "Changelog" = "https://jayqi.github.io/typenames/stable/changelog/"
 
 [tool.hatch.version]
-path = "typenames.py"
-
-[tool.hatch.build]
-exclude = ["inspect_types/", "docs/", "mkdocs.yml"]
-
+path = "typenames/__init__.py"
 
 ## DEFAULT ENVIRONMENT ##
 
 [tool.hatch.envs.default]
-dependencies = ["black", "ipython", "mypy", "reprexlite", "ruff"]
+dependencies = ["ipython", "mypy", "reprexlite", "ruff"]
 python = "3.10"
 path = ".venv"
 
 [tool.hatch.envs.default.scripts]
+format = ["ruff format"]
 lint = [
-  "black --check typenames.py tests.py",
-  "ruff check typenames.py tests.py",
+  "ruff format --check",
+  "ruff check",
 ]
-typecheck = ["mypy typenames.py --install-types --non-interactive"]
-
+typecheck = ["mypy --install-types --non-interactive"]
 
 ## TESTS ENVIRONMENT ##
 
@@ -67,9 +63,8 @@ template = "tests"
 python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.tests.scripts]
-run = "pytest tests.py --cov=typenames --cov-report=term --cov-report=html --cov-report=xml"
+run = "pytest tests --cov=typenames --cov-report=term --cov-report=html --cov-report=xml"
 run-debug = "run --pdb"
-
 
 ## DOCS ENVIRONMENT ##
 
@@ -91,7 +86,6 @@ build = [
   "mkdocs build",
 ]
 
-
 ## INSPECT-TYPES ENVIRONMENT ##
 
 [tool.hatch.envs.inspect-types]
@@ -109,45 +103,30 @@ jupyter nbconvert inspect_types/_inspect_types.ipynb \
 --execute \
 --allow-errors"""
 
-
 ## TOOLS ##
-
-[tool.black]
-line-length = 99
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-  | tests/assets
-)/
-'''
 
 [tool.ruff]
 line-length = 99
+src = ["typenames", "tests"]
+
+[tool.ruff.lint]
 select = [
   "E", # Pyflakes
   "F", # Pycodestyle
   "I", # isort
 ]
-src = ["typenames.py", "tests.py"]
 unfixable = ["F"]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["typenames"]
 force-sort-within-sections = true
 
 [tool.mypy]
-ignore_missing_imports = true
+files = ["typenames", "tests/typechecks.py"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-testpaths = ["tests.py"]
+testpaths = ["tests"]
 
 [tool.coverage.run]
-source = ["typenames.py"]
+source = ["typenames"]

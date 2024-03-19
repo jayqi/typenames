@@ -50,10 +50,10 @@ cases = [
     (typing.List[int], "List[int]"),
     (typing.Tuple[str, int], "Tuple[str, int]"),
     (typing.Optional[int], "Optional[int]"),
-    (MyClass, "tests.MyClass"),
-    (OuterClass.InnerClass, "tests.OuterClass.InnerClass"),
-    (typing.List[MyClass], "List[tests.MyClass]"),
-    (typing.Optional[typing.List[MyClass]], "Optional[List[tests.MyClass]]"),
+    (MyClass, "test_typenames.MyClass"),
+    (OuterClass.InnerClass, "test_typenames.OuterClass.InnerClass"),
+    (typing.List[MyClass], "List[test_typenames.MyClass]"),
+    (typing.Optional[typing.List[MyClass]], "Optional[List[test_typenames.MyClass]]"),
     (typing.Union[float, int], "Union[float, int]"),
     (typing.Dict[str, int], "Dict[str, int]"),
     (typing.Any, "Any"),
@@ -61,8 +61,8 @@ cases = [
     (typing.Callable[..., str], "Callable[..., str]"),
     (typing.Callable[[int], str], "Callable[[int], str]"),
     (typing.Callable[[int, float], str], "Callable[[int, float], str]"),
-    (MyGeneric[int], "tests.MyGeneric[int]"),
-    (MyEnum, "tests.MyEnum"),
+    (MyGeneric[int], "test_typenames.MyGeneric[int]"),
+    (MyEnum, "test_typenames.MyEnum"),
     (typing.List["int"], "List[int]"),
     (typing.List["typing.Any"], "List[Any]"),
     (typing.List["enum.Enum"], "List[enum.Enum]"),
@@ -71,7 +71,7 @@ cases = [
     # Python 3.8 adds typing.Literal, typing.Final, typing.TypedDict
     (typing.Literal["s", 0, MyEnum.MEMBER1], "Literal['s', 0, MyEnum.MEMBER1]"),
     (typing.Final[int], "Final[int]"),
-    (MyTypedDict, "tests.MyTypedDict"),
+    (MyTypedDict, "test_typenames.MyTypedDict"),
 ]
 
 
@@ -130,19 +130,19 @@ def test_remove_modules():
 
     # Default removal
     assert typenames(typing.Any) == "Any"
-    assert typenames(MyClass) == "tests.MyClass"
+    assert typenames(MyClass) == "test_typenames.MyClass"
     assert typenames(OtherModuleClass) == "other_module.OtherModuleClass"
-    assert typenames(FnScopeClass) == "tests.test_remove_modules.<locals>.FnScopeClass"
+    assert typenames(FnScopeClass) == "test_typenames.test_remove_modules.<locals>.FnScopeClass"
 
     # Override
-    config = TypenamesConfig(remove_modules=["tests"])
+    config = TypenamesConfig(remove_modules=["test_typenames"])
     assert typenames(typing.Any, config=config) == "typing.Any"
     assert typenames(MyClass, config=config) == "MyClass"
     assert typenames(OtherModuleClass, config=config) == "other_module.OtherModuleClass"
     assert typenames(FnScopeClass, config=config) == "test_remove_modules.<locals>.FnScopeClass"
 
     # Add to defaults
-    config = TypenamesConfig(remove_modules=DEFAULT_REMOVE_MODULES + ["tests"])
+    config = TypenamesConfig(remove_modules=DEFAULT_REMOVE_MODULES + ["test_typenames"])
     assert typenames(typing.Any, config=config) == "Any"
     assert typenames(MyClass, config=config) == "MyClass"
     assert typenames(OtherModuleClass, config=config) == "other_module.OtherModuleClass"
@@ -278,7 +278,9 @@ is_union_special_form_cases = [
 
 
 @pytest.mark.parametrize(
-    "case", is_union_special_form_cases, ids=[str(c[0]) for c in is_union_special_form_cases]
+    "case",
+    is_union_special_form_cases,
+    ids=[str(c[0]) for c in is_union_special_form_cases],
 )
 def test_is_union_special_form(case):
     """Test that is_union_special_form correctly identifies if using typing.Union."""
@@ -286,7 +288,9 @@ def test_is_union_special_form(case):
 
 
 @pytest.mark.parametrize(
-    "case", is_union_special_form_cases, ids=[str(c[0]) for c in is_union_special_form_cases]
+    "case",
+    is_union_special_form_cases,
+    ids=[str(c[0]) for c in is_union_special_form_cases],
 )
 def test_is_union_or_operator_for_typing_alias_cases(case):
     """Test that is_union_or_operator correctly returns False for all typing.Union test cases."""
@@ -305,14 +309,18 @@ if sys.version_info >= (3, 10):
     ]
 
     @pytest.mark.parametrize(
-        "case", is_union_or_operator_cases, ids=[str(c[0]) for c in is_union_or_operator_cases]
+        "case",
+        is_union_or_operator_cases,
+        ids=[str(c[0]) for c in is_union_or_operator_cases],
     )
     def test_is_union_or_operator(case):
         """Test that is_union_or_operator correctly identifies cases using | operator."""
         assert is_union_or_operator(case[0]) == case[1]
 
     @pytest.mark.parametrize(
-        "case", is_union_or_operator_cases, ids=[str(c[0]) for c in is_union_or_operator_cases]
+        "case",
+        is_union_or_operator_cases,
+        ids=[str(c[0]) for c in is_union_or_operator_cases],
     )
     def test_is_union_special_form_for_or_operator_cases(case):
         """Test that is_union_special_form correctly returns False for all | operator cases."""
