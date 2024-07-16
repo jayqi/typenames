@@ -7,17 +7,29 @@ import re
 import sys
 import types
 import typing
-from typing import Any, List, Optional, Union, get_args, get_origin
+from typing import Any, List, Optional, Union
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 OR_OPERATOR_SUPPORTED = sys.version_info >= (3, 10)
 """Flag for whether PEP 604's | operator (bitwise or) between types is supported."""
 
 LITERAL_TYPE_SUPPORTED = sys.version_info >= (3, 8)
-"""(DEPRECATED) Flag for whether PEP 586's typing.Literal is supported. typenames no longer 
+"""(DEPRECATED) Flag for whether PEP 586's typing.Literal is supported. typenames no longer
 supports Python versions where this is false.
 """
+
+# Annotated was introduced in Python 3.9 but backported in typing_extensions
+# Need to use get_args and get_origin from typing_extensions to work correctly with
+# typing_extensions.Annotated
+if sys.version_info >= (3, 9):
+    from typing import Annotated, get_args, get_origin
+else:
+    try:
+        from typing_extensions import Annotated, get_args, get_origin
+    except ModuleNotFoundError:
+        Annotated = object()
+        from typing import get_args, get_origin
 
 # TypeVar for type annotations
 # Most typing special forms have type 'object'
@@ -80,6 +92,7 @@ class TypenamesConfig:
     remove_modules: List[Union[str, re.Pattern]] = dataclasses.field(
         default_factory=lambda: list(DEFAULT_REMOVE_MODULES)
     )
+    include_extras: bool = False
 
     def __post_init__(self):
         self.union_syntax = UnionSyntax(self.union_syntax)
@@ -257,6 +270,13 @@ class GenericNode(BaseNode):
             else:
                 origin_module_prefix = "typing."
                 origin_name = self.tp._name
+        # Case: typing.Annotated
+        elif is_annotated_special_form(self.tp):
+            if self.config.include_extras:
+                origin_module_prefix = "typing."
+                origin_name = "Annotated"
+            else:
+                return str(arg_nodes[0])
         # Case: Some other generic type
         else:
             if hasattr(self.origin, "__module__"):
@@ -449,3 +469,8 @@ def is_typing_module_collection_alias(tp: type) -> bool:
     return (
         get_origin(tp) in STANDARD_COLLECTION_CLASSES and type(tp) is typing._GenericAlias  # type: ignore[attr-defined]
     )
+
+
+def is_annotated_special_form(tp: type) -> bool:
+    """Check if type annotation is the typing.Annotated special form."""
+    return get_origin(tp) is Annotated

@@ -1,5 +1,6 @@
 import collections
 import enum
+import os
 import sys
 import typing
 
@@ -9,6 +10,7 @@ from typenames import (
     DEFAULT_REMOVE_MODULES,
     REMOVE_ALL_MODULES,
     TypenamesConfig,
+    is_annotated_special_form,
     is_standard_collection_type_alias,
     is_typing_module_collection_alias,
     is_union_or_operator,
@@ -16,6 +18,19 @@ from typenames import (
     parse_type_tree,
     typenames,
 )
+
+if sys.version_info >= (3, 9):
+    from typing import Annotated
+
+    ANNOTATED_AVAILABLE = True
+else:
+    try:
+        from typing_extensions import Annotated
+
+        ANNOTATED_AVAILABLE = True
+    except ModuleNotFoundError:
+        ANNOTATED_AVAILABLE = False
+
 
 T = typing.TypeVar("T")
 
@@ -88,6 +103,17 @@ if sys.version_info >= (3, 9):
                 "list[defaultdict[str, list[int]]]",
             ),
             (collections.abc.Mapping[str, str], "Mapping[str, str]"),
+        ]
+    )
+
+if ANNOTATED_AVAILABLE:
+    # typing.Annotated is available in Python 3.9, or backported with typing_extensions
+    cases.extend(
+        [
+            (Annotated[str, "some metadata"], "str"),
+            (Annotated[str, object()], "str"),
+            (typing.Optional[Annotated[str, "some metadata"]], "Optional[str]"),
+            (typing.Optional[Annotated[str, object()]], "Optional[str]"),
         ]
     )
 
@@ -252,6 +278,19 @@ def test_standard_collection_syntax_typing_module():
         assert typenames(list[int], standard_collection_syntax="typing_module") == "List[int]"
 
 
+if ANNOTATED_AVAILABLE:
+
+    def test_annotated_include_extras():
+        """Test that Annotated is included in the output when include_extras=True."""
+        assert (
+            typenames(Annotated[str, "some metadata"], include_extras=True)
+            == "Annotated[str, 'some metadata']"
+        )
+
+        obj = object()
+        assert typenames(Annotated[str, obj], include_extras=True) == f"Annotated[str, {obj}]"
+
+
 def test_node_repr():
     assert repr(parse_type_tree(int)) == "<TypeNode <class 'int'>>"
     assert repr(parse_type_tree(typing.Any)) == "<TypeNode typing.Any>"
@@ -402,3 +441,20 @@ if sys.version_info >= (3, 9):
         tp2 = dict[typing.Tuple[int, int], str]
         assert is_typing_module_collection_alias(tp2) is False
         assert is_standard_collection_type_alias(tp2) is True
+
+
+if ANNOTATED_AVAILABLE:
+
+    def test_annotated():
+        assert is_annotated_special_form(Annotated[str, "some metadata"]) is True
+        assert is_annotated_special_form(Annotated[str, object()]) is True
+
+
+@pytest.mark.skipif(
+    os.getenv("NO_TYPING_EXTENSIONS") != "1",
+    reason="Test for the no-typing_extensions environment only.",
+)
+def test_no_typing_extensions():
+    """typing_extensions should not be installed in test environment that shouldn't have it."""
+    with pytest.raises(ModuleNotFoundError):
+        import typing_extensions  # noqa: F401

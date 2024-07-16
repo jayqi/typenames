@@ -22,7 +22,6 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 requires-python = ">=3.8"
-dependencies = ["typing_extensions>4 ; python_version < '3.8'"]
 
 [project.optional-dependencies]
 tests = ["pytest>=6"]
@@ -51,6 +50,11 @@ lint = [
   "ruff check",
 ]
 typecheck = ["mypy --install-types --non-interactive"]
+clean-coverage = [
+  "rm .coverage || true",
+  "rm coverage.xml || true",
+  "rm -r htmlcov || true",
+]
 
 ## TESTS ENVIRONMENT ##
 
@@ -60,10 +64,22 @@ dependencies = ["coverage", "pytest-cov"]
 template = "tests"
 
 [[tool.hatch.envs.tests.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+python = ["3.8"]
+typing_extensions = ["typing_extensions", "no-typing_extensions"]
+
+[[tool.hatch.envs.tests.matrix]]
+python = ["3.9", "3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.tests.overrides]
+matrix.typing_extensions.dependencies = [
+  { value = "typing_extensions>4", if = ["typing_extensions"], python = "3.8" },
+]
+matrix.typing_extensions.env-vars = [
+  { key = "NO_TYPING_EXTENSIONS", value = "1", if = ["no-typing_extensions"] },
+]
 
 [tool.hatch.envs.tests.scripts]
-run = "pytest tests --cov=typenames --cov-report=term --cov-report=html --cov-report=xml"
+run = "pytest tests -vv --cov=typenames --cov-report=term --cov-report=html --cov-report=xml --cov-append"
 run-debug = "run --pdb"
 
 ## DOCS ENVIRONMENT ##

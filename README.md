@@ -169,6 +169,22 @@ typenames(
 
 To remove all module names, you can use `REMOVE_ALL_MODULES`, which contains the pattern `re.compile(r"^(<?\w+>?\.)+")`.
 
+### Annotated (`include_extras`)
+
+This option controls whether to render `typing.Annotated` (or `typing_extensions.Annotated` if using Python 3.8) and the extra metadata. `Annotated` is a [typing special form](https://docs.python.org/3/library/typing.html#typing.Annotated) introduced in Python 3.9 and originally specified by [PEP 593](https://peps.python.org/pep-0593/). Many libraries like [Pydantic](https://docs.pydantic.dev/latest/concepts/fields/#using-annotated), [FastAPI](https://fastapi.tiangolo.com/python-types/#type-hints-with-metadata-annotations), and [Typer](https://typer.tiangolo.com/tutorial/arguments/optional/#an-alternative-cli-argument-declaration) use it to attach metadata to type annotations that are used at runtime.
+
+By default, typenames will _not_ render `Annotated` and extra metadata. Set `include_extras=True` to render them.
+
+```python
+from typing import Annotated
+from typenames import typenames
+
+typenames(Annotated[int, "some metadata"])
+#> 'int'
+typenames(Annotated[int, "some metadata"], include_extras=True)
+#> "Annotated[int, 'some metadata']"
+```
+
 ---
 
 <sup>Reproducible examples created by <a href="https://github.com/jayqi/reprexlite">reprexlite</a>.</sup>

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.0 (2024-07-16)
+
+- Changed how `typenames` handles type annotations that include `typing.Annotated` or `typing_extensions.Annotated`. ([PR #8](https://github.com/jayqi/typenames/pull/8), [Issue #7](https://github.com/jayqi/typenames/issues/7))
+    - Added `include_extras` configuration option to `typenames` to control whether `Annotated` and metadata should be shown.
+    - By default, `include_extras` is `False`, and `Annotated` and extra metadata will _not_ be rendered.
+
 ## v1.2.0 (2024-03-19)
 
 - Fixed the type signatures of `typenames` and `parse_type_tree` to reflect the typing of input type annotations, according to static type checkers. ([PR #6](https://github.com/jayqi/typenames/pull/6))
