@@ -68,7 +68,7 @@ python = ["3.8"]
 typing_extensions = ["typing_extensions", "no-typing_extensions"]
 
 [[tool.hatch.envs.tests.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+python = ["3.9", "3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.tests.overrides]
 matrix.typing_extensions.dependencies = [
