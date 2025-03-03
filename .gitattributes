@@ -1,0 +1,3 @@
+# Treat inspect_types notebook as developer documentation
+# https://github.com/github-linguist/linguist/blob/main/docs/overrides.md#using-gitattributes
+inspect_types/** linguist-documentation
