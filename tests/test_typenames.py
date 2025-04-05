@@ -65,10 +65,10 @@ cases = [
     (typing.List[int], "List[int]"),
     (typing.Tuple[str, int], "Tuple[str, int]"),
     (typing.Optional[int], "Optional[int]"),
-    (MyClass, "test_typenames.MyClass"),
-    (OuterClass.InnerClass, "test_typenames.OuterClass.InnerClass"),
-    (typing.List[MyClass], "List[test_typenames.MyClass]"),
-    (typing.Optional[typing.List[MyClass]], "Optional[List[test_typenames.MyClass]]"),
+    (MyClass, "tests.test_typenames.MyClass"),
+    (OuterClass.InnerClass, "tests.test_typenames.OuterClass.InnerClass"),
+    (typing.List[MyClass], "List[tests.test_typenames.MyClass]"),
+    (typing.Optional[typing.List[MyClass]], "Optional[List[tests.test_typenames.MyClass]]"),
     (typing.Union[float, int], "Union[float, int]"),
     (typing.Dict[str, int], "Dict[str, int]"),
     (typing.Any, "Any"),
@@ -76,8 +76,8 @@ cases = [
     (typing.Callable[..., str], "Callable[..., str]"),
     (typing.Callable[[int], str], "Callable[[int], str]"),
     (typing.Callable[[int, float], str], "Callable[[int, float], str]"),
-    (MyGeneric[int], "test_typenames.MyGeneric[int]"),
-    (MyEnum, "test_typenames.MyEnum"),
+    (MyGeneric[int], "tests.test_typenames.MyGeneric[int]"),
+    (MyEnum, "tests.test_typenames.MyEnum"),
     (typing.List["int"], "List[int]"),
     (typing.List["typing.Any"], "List[Any]"),
     (typing.List["enum.Enum"], "List[enum.Enum]"),
@@ -86,7 +86,7 @@ cases = [
     # Python 3.8 adds typing.Literal, typing.Final, typing.TypedDict
     (typing.Literal["s", 0, MyEnum.MEMBER1], "Literal['s', 0, MyEnum.MEMBER1]"),
     (typing.Final[int], "Final[int]"),
-    (MyTypedDict, "test_typenames.MyTypedDict"),
+    (MyTypedDict, "tests.test_typenames.MyTypedDict"),
 ]
 
 
@@ -156,19 +156,21 @@ def test_remove_modules():
 
     # Default removal
     assert typenames(typing.Any) == "Any"
-    assert typenames(MyClass) == "test_typenames.MyClass"
+    assert typenames(MyClass) == "tests.test_typenames.MyClass"
     assert typenames(OtherModuleClass) == "other_module.OtherModuleClass"
-    assert typenames(FnScopeClass) == "test_typenames.test_remove_modules.<locals>.FnScopeClass"
+    assert (
+        typenames(FnScopeClass) == "tests.test_typenames.test_remove_modules.<locals>.FnScopeClass"
+    )
 
     # Override
-    config = TypenamesConfig(remove_modules=["test_typenames"])
+    config = TypenamesConfig(remove_modules=["tests.test_typenames"])
     assert typenames(typing.Any, config=config) == "typing.Any"
     assert typenames(MyClass, config=config) == "MyClass"
     assert typenames(OtherModuleClass, config=config) == "other_module.OtherModuleClass"
     assert typenames(FnScopeClass, config=config) == "test_remove_modules.<locals>.FnScopeClass"
 
     # Add to defaults
-    config = TypenamesConfig(remove_modules=DEFAULT_REMOVE_MODULES + ["test_typenames"])
+    config = TypenamesConfig(remove_modules=DEFAULT_REMOVE_MODULES + ["tests.test_typenames"])
     assert typenames(typing.Any, config=config) == "Any"
     assert typenames(MyClass, config=config) == "MyClass"
     assert typenames(OtherModuleClass, config=config) == "other_module.OtherModuleClass"
