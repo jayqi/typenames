@@ -39,7 +39,8 @@ markdown_extensions:
   - tables:
 
 plugins:
-  - search
+  - search:
+  - macros:
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -68,3 +69,8 @@ extra:
   version:
     provider: mike
     default: stable
+
+watch:
+  - "../typenames"
+  - "../README.md"
+  - "../CHANGELOG.md"

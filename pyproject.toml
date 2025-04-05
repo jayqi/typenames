@@ -56,6 +56,7 @@ tests = [
 ]
 docs = [
   "mkdocs",
+  "mkdocs-macros-plugin",
   "mkdocs-material",
   "mike",
   "mkdocstrings[python]",

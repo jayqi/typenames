@@ -48,3 +48,11 @@ inspect-types-all:
     for python in 3.9 3.10 3.11 3.12 3.13; do \
         just python=$python inspect-types; \
     done
+
+# Generate docs
+docs:
+    uv run --directory docs mkdocs build
+
+# Serve docs
+docs-serve:
+    uv run --directory docs mkdocs serve
