@@ -10,17 +10,18 @@ sync:
 
 # Run linting
 lint:
-    ruff format --check
-    ruff check src tests
+    uv run ruff format --check
+    uv run ruff check
 
 # Run formatting
 format:
-    ruff format
-    ruff check --fix
+    uv run ruff format
+    uv run ruff check --fix
 
 # Run static typechecking
 typecheck:
-    mypy src --install-types --non-interactive
+    uv run --python {{python}} --no-dev --group typecheck --isolated \
+        mypy typenames tests/typechecks.py --install-types --non-interactive
 
 # Run the tests
 test *args:
