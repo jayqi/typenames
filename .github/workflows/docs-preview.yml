@@ -8,6 +8,7 @@ jobs:
   build:
     name: Build docs and deploy preview
     runs-on: ubuntu-latest
+    environment: docs-preview
 
     steps:
       - uses: actions/checkout@v4
