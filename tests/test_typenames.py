@@ -1,8 +1,8 @@
 import collections
 import enum
-import os
 import sys
 import typing
+from typing import Annotated
 
 import pytest
 
@@ -18,19 +18,6 @@ from typenames import (
     parse_type_tree,
     typenames,
 )
-
-if sys.version_info >= (3, 9):
-    from typing import Annotated
-
-    ANNOTATED_AVAILABLE = True
-else:
-    try:
-        from typing_extensions import Annotated
-
-        ANNOTATED_AVAILABLE = True
-    except ModuleNotFoundError:
-        ANNOTATED_AVAILABLE = False
-
 
 T = typing.TypeVar("T")
 
@@ -87,35 +74,23 @@ cases = [
     (typing.Literal["s", 0, MyEnum.MEMBER1], "Literal['s', 0, MyEnum.MEMBER1]"),
     (typing.Final[int], "Final[int]"),
     (MyTypedDict, "tests.test_typenames.MyTypedDict"),
-]
-
-
-if sys.version_info >= (3, 9):
     # Python 3.9 adds use of standard collection types as a generic in type annotations (PEP 585),
     # typing.Annotated
-    cases.extend(
-        [
-            (list[int], "list[int]"),
-            (list[tuple[int, str]], "list[tuple[int, str]]"),
-            (list[typing.Tuple[int, str]], "list[Tuple[int, str]]"),
-            (
-                list[collections.defaultdict[str, list[int]]],
-                "list[defaultdict[str, list[int]]]",
-            ),
-            (collections.abc.Mapping[str, str], "Mapping[str, str]"),
-        ]
-    )
-
-if ANNOTATED_AVAILABLE:
+    (list[int], "list[int]"),
+    (list[tuple[int, str]], "list[tuple[int, str]]"),
+    (list[typing.Tuple[int, str]], "list[Tuple[int, str]]"),
+    (
+        list[collections.defaultdict[str, list[int]]],
+        "list[defaultdict[str, list[int]]]",
+    ),
+    (collections.abc.Mapping[str, str], "Mapping[str, str]"),
     # typing.Annotated is available in Python 3.9, or backported with typing_extensions
-    cases.extend(
-        [
-            (Annotated[str, "some metadata"], "str"),
-            (Annotated[str, object()], "str"),
-            (typing.Optional[Annotated[str, "some metadata"]], "Optional[str]"),
-            (typing.Optional[Annotated[str, object()]], "Optional[str]"),
-        ]
-    )
+    (Annotated[str, "some metadata"], "str"),
+    (Annotated[str, object()], "str"),
+    (typing.Optional[Annotated[str, "some metadata"]], "Optional[str]"),
+    (typing.Optional[Annotated[str, object()]], "Optional[str]"),
+]
+
 
 if sys.version_info >= (3, 10):
     # Python 3.10 adds union syntax with the | operator (bitwise or),
@@ -184,9 +159,8 @@ def test_remove_modules():
     assert typenames(OtherModuleClass, config=config) == "OtherModuleClass"
     assert typenames(FnScopeClass, config=config) == "FnScopeClass"
 
-    if sys.version_info >= (3, 9):
-        assert typenames(collections.Counter[str], config=config) == "Counter[str]"
-        assert typenames(collections.abc.Sequence[str], config=config) == "Sequence[str]"
+    assert typenames(collections.Counter[str], config=config) == "Counter[str]"
+    assert typenames(collections.abc.Sequence[str], config=config) == "Sequence[str]"
 
 
 def test_union_syntax_or_operator():
@@ -280,17 +254,15 @@ def test_standard_collection_syntax_typing_module():
         assert typenames(list[int], standard_collection_syntax="typing_module") == "List[int]"
 
 
-if ANNOTATED_AVAILABLE:
+def test_annotated_include_extras():
+    """Test that Annotated is included in the output when include_extras=True."""
+    assert (
+        typenames(Annotated[str, "some metadata"], include_extras=True)
+        == "Annotated[str, 'some metadata']"
+    )
 
-    def test_annotated_include_extras():
-        """Test that Annotated is included in the output when include_extras=True."""
-        assert (
-            typenames(Annotated[str, "some metadata"], include_extras=True)
-            == "Annotated[str, 'some metadata']"
-        )
-
-        obj = object()
-        assert typenames(Annotated[str, obj], include_extras=True) == f"Annotated[str, {obj}]"
+    obj = object()
+    assert typenames(Annotated[str, obj], include_extras=True) == f"Annotated[str, {obj}]"
 
 
 def test_node_repr():
@@ -402,61 +374,51 @@ def test_is_standard_collection_type_alias_for_typing_alias_cases(case):
     assert is_standard_collection_type_alias(case[0]) is False
 
 
-if sys.version_info >= (3, 9):
-    # Python 3.9 adds generic aliases for standard collections
-    is_standard_collection_type_alias_cases = [
-        (list[int], True),
-        (dict[str, int], True),
-        (tuple[int, int], True),
-        (list[typing.Optional[int]], True),
-        (dict[tuple[int, int], str], True),
-        (dict[typing.Tuple[int, int], str], True),
-        (typing.Optional[list[int]], False),
-        (typing.Union[list[int], list[str]], False),
-    ]
-
-    @pytest.mark.parametrize(
-        "case",
-        is_standard_collection_type_alias_cases,
-        ids=[str(c[0]) for c in is_standard_collection_type_alias_cases],
-    )
-    def test_is_standard_collection_type_alias(case):
-        assert is_standard_collection_type_alias(case[0]) == case[1]
-
-    @pytest.mark.parametrize(
-        "case",
-        is_standard_collection_type_alias_cases,
-        ids=[str(c[0]) for c in is_standard_collection_type_alias_cases],
-    )
-    def test_is_typing_module_collection_alias_for_collection_types(case):
-        """Test that is_typing_module_collection_alias correctly returns False for all standard
-        collection type aliases."""
-        assert is_typing_module_collection_alias(case[0]) is False
-
-    def test_nested_collection_types_nested_both():
-        """Test that is_typing_module_collection_alias and is_standard_collection_type_alias
-        correctly identify nested cases using both typing approaches."""
-        tp1 = typing.Dict[tuple[int, int], str]
-        assert is_typing_module_collection_alias(tp1) is True
-        assert is_standard_collection_type_alias(tp1) is False
-
-        tp2 = dict[typing.Tuple[int, int], str]
-        assert is_typing_module_collection_alias(tp2) is False
-        assert is_standard_collection_type_alias(tp2) is True
+# Python 3.9 adds generic aliases for standard collections
+is_standard_collection_type_alias_cases = [
+    (list[int], True),
+    (dict[str, int], True),
+    (tuple[int, int], True),
+    (list[typing.Optional[int]], True),
+    (dict[tuple[int, int], str], True),
+    (dict[typing.Tuple[int, int], str], True),
+    (typing.Optional[list[int]], False),
+    (typing.Union[list[int], list[str]], False),
+]
 
 
-if ANNOTATED_AVAILABLE:
-
-    def test_annotated():
-        assert is_annotated_special_form(Annotated[str, "some metadata"]) is True
-        assert is_annotated_special_form(Annotated[str, object()]) is True
-
-
-@pytest.mark.skipif(
-    os.getenv("NO_TYPING_EXTENSIONS") != "1",
-    reason="Test for the no-typing_extensions environment only.",
+@pytest.mark.parametrize(
+    "case",
+    is_standard_collection_type_alias_cases,
+    ids=[str(c[0]) for c in is_standard_collection_type_alias_cases],
 )
-def test_no_typing_extensions():
-    """typing_extensions should not be installed in test environment that shouldn't have it."""
-    with pytest.raises(ModuleNotFoundError):
-        import typing_extensions  # noqa: F401
+def test_is_standard_collection_type_alias(case):
+    assert is_standard_collection_type_alias(case[0]) == case[1]
+
+
+@pytest.mark.parametrize(
+    "case",
+    is_standard_collection_type_alias_cases,
+    ids=[str(c[0]) for c in is_standard_collection_type_alias_cases],
+)
+def test_is_typing_module_collection_alias_for_collection_types(case):
+    """Test that is_typing_module_collection_alias correctly returns False for all standard
+    collection type aliases."""
+    assert is_typing_module_collection_alias(case[0]) is False
+
+
+def test_nested_collection_types_nested_both():
+    """Test that is_typing_module_collection_alias and is_standard_collection_type_alias
+    correctly identify nested cases using both typing approaches."""
+    tp1 = typing.Dict[tuple[int, int], str]
+    assert is_typing_module_collection_alias(tp1) is True
+    assert is_standard_collection_type_alias(tp1) is False
+
+    tp2 = dict[typing.Tuple[int, int], str]
+    assert is_typing_module_collection_alias(tp2) is False
+    assert is_standard_collection_type_alias(tp2) is True
+
+
+def test_annotated():
+    assert is_annotated_special_form(Annotated[str, "some metadata"]) is True
+    assert is_annotated_special_form(Annotated[str, object()]) is True
