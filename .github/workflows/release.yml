@@ -1,39 +1,38 @@
 name: release
+run-name: Release of ${{ inputs.version }}
 
 on:
-  release:
-    types:
-      - published
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag'
+        required: true
 
 jobs:
   build:
-    name: Build and publish new release
+    name: Publish new release
     runs-on: "ubuntu-latest"
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
-          python-version: "3.10"
-
-      - name: Install hatch
-        run: |
-          pipx install hatch
+          enable-cache: true
+          cache-suffix: "dev"
+          cache-dependency-glob: |
+            uv.lock
 
       - name: Check that versions match
-        id: version
         run: |
-          echo "Release tag: [${{ github.event.release.tag_name }}]"
-          PACKAGE_VERSION=$(hatch version)
+          echo "Input version tag: [${{ github.event.inputs.version }}] "
+          PACKAGE_VERSION=$(uv run python -m vspect read .)
           echo "Package version: [$PACKAGE_VERSION]"
-          [ ${{ github.event.release.tag_name }} == "v$PACKAGE_VERSION" ] || { exit 1; }
-          echo "major_minor_version=v${PACKAGE_VERSION%.*}" >> $GITHUB_OUTPUT
+          [[ ${{ github.event.inputs.version }} == "v$PACKAGE_VERSION" ]] || { exit 1; }
 
       - name: Build package
         run: |
-          hatch build
+          uv build
 
       - name: Publish to Test PyPI
         uses: pypa/gh-action-pypi-publish@v1.3.0
@@ -50,21 +49,21 @@ jobs:
           password: ${{ secrets.PYPI_PROD_TOKEN }}
           skip_existing: false
 
-      - name: Deploy docs to gh-pages
-        working-directory: docs
+      - id: extract-changelog
+        uses: sean0x42/markdown-extract@v2.1.0
+        with:
+          file: CHANGELOG.md
+          pattern: ${{ github.event.inputs.version }}
+
+      - name: Write output to file
         run: |
-          git fetch origin gh-pages --depth=1
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          # Check for old stable version
-          hatch env create docs
-          hatch run docs:mike list -j | jq
-          OLD_STABLE=$(hatch run docs:mike list -j | jq -r '.[] | select(.aliases | index("stable")) | .title' | awk '{print $1;}')
-          echo $OLD_STABLE
-          # Rename old stable version if it exists
-          [[ -z "${OLD_STABLE}" ]] || hatch run docs:mike retitle stable $OLD_STABLE
-          # Deploy new version as stable
-          hatch run docs:mike deploy --push --update-aliases \
-            ${{ steps.version.outputs.major_minor_version }} \
-            stable \
-            --title="${{ github.event.release.tag_name }} (stable)"
+          cat <<'__EOF__' > __CHANGELOG-extracted.md
+          ${{ steps.extract-changelog.outputs.markdown }}
+          __EOF__
+
+      - uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.event.inputs.version }}
+          commit: main
+          artifacts: "dist/*.whl,dist/*.tar.gz"
+          bodyFile: "__CHANGELOG-extracted.md"
