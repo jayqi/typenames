@@ -45,7 +45,7 @@ No need for string manipulation to get what you want!
 
 ## Installation
 
-typenames is available on PyPI:
+typenames is available on [PyPI](https://pypi.org/project/typenames/):
 
 ```bash
 pip install typenames
@@ -56,6 +56,7 @@ pip install typenames
 The main way to use the library is the `typenames` function. Calling it on a type annotation renders a string representation:
 
 ```python
+import collections.abc
 import typing
 from typenames import typenames
 

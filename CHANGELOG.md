@@ -1,10 +1,16 @@
 # Changelog
 
+## v1.4.0 (Unreleased)
+
+- Added support for Python 3.13.
+- Removed support for Python 3.8.
+- Removed deprecated `LITERAL_TYPE_SUPPORTED` flag. (Deprecated in v1.1.0.)
+
 ## v1.3.0 (2024-07-16)
 
 - Changed how `typenames` handles type annotations that include `typing.Annotated` or `typing_extensions.Annotated`. ([PR #8](https://github.com/jayqi/typenames/pull/8), [Issue #7](https://github.com/jayqi/typenames/issues/7))
-    - Added `include_extras` configuration option to `typenames` to control whether `Annotated` and metadata should be shown.
-    - By default, `include_extras` is `False`, and `Annotated` and extra metadata will _not_ be rendered.
+  - Added `include_extras` configuration option to `typenames` to control whether `Annotated` and metadata should be shown.
+  - By default, `include_extras` is `False`, and `Annotated` and extra metadata will _not_ be rendered.
 
 ## v1.2.0 (2024-03-19)
 

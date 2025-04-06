@@ -11,12 +11,12 @@ nav:
 theme:
   name: material
   palette:
-    # Palette toggle for dark mode
-    - scheme: slate
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
       primary: indigo
       accent: blue
       toggle:
-        icon: material/brightness-4
+        icon: material/brightness-auto
         name: Switch to light mode
     # Palette toggle for light mode
     - scheme: default
@@ -25,6 +25,13 @@ theme:
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
 
 extra_css:
   - css/extra.css
@@ -39,7 +46,8 @@ markdown_extensions:
   - tables:
 
 plugins:
-  - search
+  - search:
+  - macros:
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -63,8 +71,15 @@ plugins:
   - mike:
       alias_type: copy
       canonical_version: stable
+      version_selector: true
 
 extra:
   version:
     provider: mike
     default: stable
+    alias: true
+
+watch:
+  - "../typenames"
+  - "../README.md"
+  - "../CHANGELOG.md"

@@ -7,29 +7,13 @@ import re
 import sys
 import types
 import typing
-from typing import Any, List, Optional, Union
+from typing import Annotated, Any, List, Optional, Union, get_args, get_origin
 
 __version__ = "1.3.0"
 
 OR_OPERATOR_SUPPORTED = sys.version_info >= (3, 10)
 """Flag for whether PEP 604's | operator (bitwise or) between types is supported."""
 
-LITERAL_TYPE_SUPPORTED = sys.version_info >= (3, 8)
-"""(DEPRECATED) Flag for whether PEP 586's typing.Literal is supported. typenames no longer
-supports Python versions where this is false.
-"""
-
-# Annotated was introduced in Python 3.9 but backported in typing_extensions
-# Need to use get_args and get_origin from typing_extensions to work correctly with
-# typing_extensions.Annotated
-if sys.version_info >= (3, 9):
-    from typing import Annotated, get_args, get_origin
-else:
-    try:
-        from typing_extensions import Annotated, get_args, get_origin
-    except ModuleNotFoundError:
-        Annotated = object()
-        from typing import get_args, get_origin
 
 # TypeVar for type annotations
 # Most typing special forms have type 'object'

@@ -1,0 +1,82 @@
+name: docs-publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy-as:
+        type: choice
+        description: Deploy as
+        options:
+          - latest
+          - version
+        default: latest
+      is-stable:
+        type: boolean
+        description: Deploy as stable
+        default: false
+      version-format:
+        type: string
+        description: Version format
+        default: "v{major_minor_version}"
+
+jobs:
+  build:
+    name: Build docs and publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fail if deploying as latest but marked as stable
+        if: github.event.inputs.deploy-as == 'latest' && github.event.inputs.is-stable == 'true'
+        run: |
+          echo "Error: Cannot deploy as 'latest' when 'is-stable' is true."
+          exit 1
+
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v2
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-suffix: "docs"
+          cache-dependency-glob: |
+            uv.lock
+
+      - name: Set git user to github-actions[bot]
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Fetch gh-pages branch
+        run: |
+          git fetch origin gh-pages --depth=1
+
+      - name: Deploy as latest
+        if: github.event.inputs.deploy-as == 'latest' || github.event_name == 'push'
+        working-directory: docs/
+        run: |
+          uv run mike deploy --push latest --title=latest
+
+      - name: Get version tag
+        id: get-version-tag
+        if: github.event.inputs.deploy-as == 'version'
+        run: |
+          VERSION_TAG=$(uv run vspect read . "${{ github.event.inputs.version-format }}")
+          echo "VERSION_TAG=${VERSION_TAG}" | tee -a $GITHUB_OUTPUT
+
+      - name: Deploy as version
+        if: github.event.inputs.deploy-as == 'version'
+        working-directory: docs/
+        run: |
+          TITLE=$(uv run vspect read .. "v{version}")
+          TAG=${{ steps.get-version-tag.outputs.VERSION_TAG }}
+          uv run mike deploy --push $TAG --title="${TITLE}"
+
+      - name: Assign stable alias
+        if: github.event.inputs.is-stable == 'true'
+        working-directory: docs/
+        run: |
+          TAG=${{ steps.get-version-tag.outputs.VERSION_TAG }}
+          uv run mike alias --push --update-aliases $TAG stable
