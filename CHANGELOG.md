@@ -2,7 +2,9 @@
 
 ## v1.4.0 (Unreleased)
 
-...
+- Added support for Python 3.13.
+- Removed support for Python 3.8.
+- Removed deprecated `LITERAL_TYPE_SUPPORTED` flag. (Deprecated in v1.1.0.)
 
 ## v1.3.0 (2024-07-16)
 
