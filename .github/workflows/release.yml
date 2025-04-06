@@ -12,6 +12,9 @@ jobs:
   build:
     name: Publish new release
     runs-on: "ubuntu-latest"
+    environment: release
+    permissions:
+      id-token: write  # Required for PyPI trusted publishing
 
     steps:
       - uses: actions/checkout@v4
@@ -35,19 +38,15 @@ jobs:
           uv build
 
       - name: Publish to Test PyPI
-        uses: pypa/gh-action-pypi-publish@v1.3.0
+        uses: pypa/gh-action-pypi-publish@v1.12.4
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_TEST_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-          skip_existing: true
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
 
       - name: Publish to Production PyPI
-        uses: pypa/gh-action-pypi-publish@v1.3.0
+        uses: pypa/gh-action-pypi-publish@v1.12.4
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_PROD_TOKEN }}
-          skip_existing: false
+          skip-existing: false
 
       - id: extract-changelog
         uses: sean0x42/markdown-extract@v2.1.0
