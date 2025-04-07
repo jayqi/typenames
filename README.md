@@ -3,8 +3,8 @@
 [![Docs Status](https://img.shields.io/badge/docs-stable-informational)](https://jayqi.github.io/typenames/)
 [![PyPI](https://img.shields.io/pypi/v/typenames.svg)](https://pypi.org/project/typenames/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/typenames)](https://pypi.org/project/typenames/)
-[![tests](https://github.com/jayqi/typenames/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/jayqi/typenames/actions/workflows/tests.yml?query=branch%3Amain)
-[![codecov](https://codecov.io/gh/jayqi/typenames/branch/main/graph/badge.svg)](https://codecov.io/gh/jayqi/typenames)
+[![tests](https://github.com/drivendataorg/typenames/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/drivendataorg/typenames/actions/workflows/tests.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/drivendataorg/typenames/branch/main/graph/badge.svg)](https://codecov.io/gh/drivendataorg/typenames)
 
 **typenames** is a configurable Python library for creating string representations of type annotations. By default, it produces compact representations by removing standard library module names. Configurable options include standardizing on `|` operator syntax for unions or standard collections classes for generics.
 

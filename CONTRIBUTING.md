@@ -4,7 +4,7 @@
 
 ## Report a bug or request a feature
 
-Please file an issue in the [issue tracker](https://github.com/jayqi/typenames/issues).
+Please file an issue in the [issue tracker](https://github.com/drivendataorg/typenames/issues).
 
 ## Developers guide
 

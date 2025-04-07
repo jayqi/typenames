@@ -1,7 +1,7 @@
 site_name: typenames
 site_url: https://jayqi.github.io/typenames
 site_description: String representations of Python type annotations
-repo_url: https://github.com/jayqi/typenames
+repo_url: https://github.com/drivendataorg/typenames
 
 nav:
   - Home: "index.md"

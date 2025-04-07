@@ -24,9 +24,9 @@ tests = ["pytest>=6"]
 
 [project.urls]
 "Homepage" = "https://jayqi.github.io/typenames/"
-"Repository" = "https://github.com/jayqi/typenames"
+"Repository" = "https://github.com/drivendataorg/typenames"
 "Documentation" = "https://jayqi.github.io/typenames/"
-"Bug Tracker" = "https://github.com/jayqi/typenames/issues"
+"Bug Tracker" = "https://github.com/drivendataorg/typenames/issues"
 "Changelog" = "https://jayqi.github.io/typenames/stable/changelog/"
 
 [build-system]
