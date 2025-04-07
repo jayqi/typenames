@@ -1,40 +1,57 @@
 # Contributing to typenames
 
-[![Hatch project](https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-4051b5.svg)](https://github.com/pypa/hatch) [![linting - Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v0.json)](https://github.com/charliermarsh/ruff) [![code style - black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![types - mypy](https://img.shields.io/badge/types-mypy-blue.svg)](https://github.com/python/mypy)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![types - mypy](https://img.shields.io/badge/types-mypy-blue.svg)](https://github.com/python/mypy)
 
 ## Report a bug or request a feature
 
 Please file an issue in the [issue tracker](https://github.com/drivendataorg/typenames/issues).
 
+## External contributions
+
+Pull requests from external contributors are welcome. However, we ask that any nontrivial changes be discussed with maintainers in an [issue](https://github.com/drivendataorg/typenames/issues) first before submitting a pull request.
+
 ## Developers guide
 
-This project uses [Hatch](https://github.com/pypa/hatch) as its project management tool.
+This project uses [uv](https://docs.astral.sh/uv/) as its project management tool and [Just](https://github.com/casey/just) as a task runner.
+
+### Create development environment
+
+```bash
+just sync
+```
 
 ### Tests
 
-To run tests in your current environment, you should install from source with the `tests` extra to additionally install test dependencies (pytest). Then, use pytest to run the tests.
-
 ```bash
-# Install with test dependencies
-pip install .[tests]
-# Run tests
-pytest tests.py
+just test
 ```
 
-To run tests on the full test matrix, you should use Hatch:
+You can run the tests for a specific Python version with, for example:
 
 ```bash
-hatch run tests:run
+just python=3.12 test
+```
+
+To run tests on all supported Python versions, run:
+
+```bash
+just test-all
 ```
 
 ### Type annotation inspection notebooks
 
 The directory [`inspect_types/`](./inspect_types/) contains Jupyter notebooks for each supported Python version that inspects attributes and behavior of various type annotations. These are intended as a development aide for understanding behavior of different annotations in different versions of Python.
 
-To regenerate these notebooks, run:
+There are Just commands for regenerating these notebooks by running `jupyter nbconvert` in an isolated environment. To regenerate a notebook for a specific Python version, run for example:
 
 ```bash
-hatch run inspect-types:generate-notebook
+just python=3.12 inspect-types
 ```
 
-This command will run `nbconvert` on the configured Python version matrix in isolated environments.
+To regenerate notebooks for all supported Python versions, run:
+
+```bash
+just inspect-types-all
+```
