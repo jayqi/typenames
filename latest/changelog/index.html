@@ -17,7 +17,7 @@
       
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../assets/logo.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.11">
     
     
@@ -100,8 +100,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="typenames" class="md-header__button md-logo" aria-label="typenames" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="../assets/logo.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -246,8 +245,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="typenames" class="md-nav__button md-logo" aria-label="typenames" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="../assets/logo.svg" alt="logo">
 
     </a>
     typenames
@@ -368,9 +366,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#v140-unreleased" class="md-nav__link">
+  <a href="#v200-unreleased" class="md-nav__link">
     <span class="md-ellipsis">
-      v1.4.0 (Unreleased)
+      v2.0.0 (Unreleased)
     </span>
   </a>
   
@@ -447,9 +445,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#v140-unreleased" class="md-nav__link">
+  <a href="#v200-unreleased" class="md-nav__link">
     <span class="md-ellipsis">
-      v1.4.0 (Unreleased)
+      v2.0.0 (Unreleased)
     </span>
   </a>
   
@@ -511,12 +509,14 @@
 
 
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
-<h2 id="v140-unreleased">v1.4.0 (Unreleased)<a class="headerlink" href="#v140-unreleased" title="Permanent link">&para;</a></h2>
+<h2 id="v200-unreleased">v2.0.0 (Unreleased)<a class="headerlink" href="#v200-unreleased" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Added support for Python 3.13.</li>
+<li>Changed the default for <a href="../#standard-collection-syntax-standard_collection_syntax"><code>standard_collection_syntax</code></a> from <code>"as_given"</code> to <code>"standard_class"</code>. This change is intended to encourage the use of the standard collection syntax, since all currently supported Python versions support it and the typing module aliases are <a href="https://docs.python.org/3/library/typing.html#deprecated-aliases">deprecated</a>.</li>
 <li>Removed support for Python 3.8.</li>
+<li>Added support for Python 3.13.</li>
 <li>Removed deprecated <code>LITERAL_TYPE_SUPPORTED</code> flag. (Deprecated in v1.1.0.)</li>
 </ul>
+<p><em>Note: the typenames repository has moved to the <a href="https://github.com/drivendataorg/typenames">drivendataorg</a> GitHub organization. The documentation website has also moved to a <a href="https://typenames.drivendata.org">new address</a>.</em></p>
 <h2 id="v130-2024-07-16">v1.3.0 (2024-07-16)<a class="headerlink" href="#v130-2024-07-16" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Changed how <code>typenames</code> handles type annotations that include <code>typing.Annotated</code> or <code>typing_extensions.Annotated</code>. (<a href="https://github.com/drivendataorg/typenames/pull/8">PR #8</a>, <a href="https://github.com/drivendataorg/typenames/issues/7">Issue #7</a>)<ul>
