@@ -1,10 +1,6 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "typenames"
-dynamic = ["version"]
+version = "1.4.0"
 description = "String representations of type annotations."
 readme = "README.md"
 authors = [{ name = "Jay Qi", email = "jayqi.opensource@gmail.com" }]
@@ -15,109 +11,61 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 [project.optional-dependencies]
 tests = ["pytest>=6"]
 
 [project.urls]
-"Homepage" = "https://jayqi.github.io/typenames/"
-"Repository" = "https://github.com/jayqi/typenames"
-"Documentation" = "https://jayqi.github.io/typenames/"
-"Bug Tracker" = "https://github.com/jayqi/typenames/issues"
-"Changelog" = "https://jayqi.github.io/typenames/stable/changelog/"
+"Homepage" = "https://typenames.drivendata.org/"
+"Repository" = "https://github.com/drivendataorg/typenames"
+"Documentation" = "https://typenames.drivendata.org/"
+"Bug Tracker" = "https://github.com/drivendataorg/typenames/issues"
+"Changelog" = "https://typenames.drivendata.org/stable/changelog/"
 
-[tool.hatch.version]
-path = "typenames/__init__.py"
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-## DEFAULT ENVIRONMENT ##
+## DEV
 
-[tool.hatch.envs.default]
-dependencies = ["ipython", "mypy", "reprexlite", "ruff"]
-python = "3.10"
-path = ".venv"
-
-[tool.hatch.envs.default.scripts]
-format = ["ruff format"]
+[dependency-groups]
+dev = [
+  { include-group = "lint" },
+  { include-group = "docs" },
+  "ipython",
+  "reprexlite",
+  "vspect",
+]
 lint = [
-  "ruff format --check",
-  "ruff check",
+  "ruff",
 ]
-typecheck = ["mypy --install-types --non-interactive"]
-clean-coverage = [
-  "rm .coverage || true",
-  "rm coverage.xml || true",
-  "rm -r htmlcov || true",
+typecheck = [
+  "mypy",
 ]
-
-## TESTS ENVIRONMENT ##
-
-[tool.hatch.envs.tests]
-features = ["tests"]
-dependencies = ["coverage", "pytest-cov"]
-template = "tests"
-
-[[tool.hatch.envs.tests.matrix]]
-python = ["3.8"]
-typing_extensions = ["typing_extensions", "no-typing_extensions"]
-
-[[tool.hatch.envs.tests.matrix]]
-python = ["3.9", "3.10", "3.11", "3.12"]
-
-[tool.hatch.envs.tests.overrides]
-matrix.typing_extensions.dependencies = [
-  { value = "typing_extensions>4", if = ["typing_extensions"], python = "3.8" },
+tests = [
+  "pytest",
+  "coverage",
+  "pytest-cov",
 ]
-matrix.typing_extensions.env-vars = [
-  { key = "NO_TYPING_EXTENSIONS", value = "1", if = ["no-typing_extensions"] },
-]
-
-[tool.hatch.envs.tests.scripts]
-run = "pytest tests -vv --cov=typenames --cov-report=term --cov-report=html --cov-report=xml --cov-append"
-run-debug = "run --pdb"
-
-## DOCS ENVIRONMENT ##
-
-[tool.hatch.envs.docs]
-dependencies = [
+docs = [
   "mkdocs",
-  "mkdocs-material",
+  "mkdocs-macros-plugin",
+  "mkdocs-material>=9.5.0",
   "mike",
   "mkdocstrings[python]",
   "mdx-truly-sane-lists",
 ]
-template = "docs"
-
-[tool.hatch.envs.docs.scripts]
-build = [
-  "rm -rf site/",
-  "cp README.md docs/index.md",
-  "cp CHANGELOG.md docs/changelog.md",
-  "mkdocs build",
+inspect-types = [
+  "ipykernel",
+  "nbconvert",
 ]
-
-## INSPECT-TYPES ENVIRONMENT ##
-
-[tool.hatch.envs.inspect-types]
-dependencies = ["ipykernel", "nbconvert"]
-detached = true
-
-[[tool.hatch.envs.inspect-types.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
-
-[tool.hatch.envs.inspect-types.scripts]
-generate-notebook = """
-jupyter nbconvert inspect_types/_inspect_types.ipynb \
---to notebook \
---output inspect_types_{matrix:python}.ipynb \
---execute \
---allow-errors"""
 
 ## TOOLS ##
 
@@ -142,7 +90,14 @@ files = ["typenames", "tests/typechecks.py"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
+addopts = "--cov=typenames --cov-report=term --cov-report=html --cov-report=xml"
 testpaths = ["tests"]
 
 [tool.coverage.run]
 source = ["typenames"]
+
+[tool.coverage.paths]
+typenames = [
+  "typenames/",
+  "*/site-packages/typenames/"
+]
