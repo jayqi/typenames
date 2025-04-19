@@ -10,6 +10,8 @@ nav:
 
 theme:
   name: material
+  logo: assets/logo.svg
+  favicon: assets/logo.png
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
@@ -39,6 +41,7 @@ extra_css:
   - css/extra.css
 
 markdown_extensions:
+  - github-callouts:
   - pymdownx.highlight:
   - pymdownx.superfences:
   - toc:
@@ -85,3 +88,4 @@ watch:
   - "../typenames"
   - "../README.md"
   - "../CHANGELOG.md"
+  - "./main.py"
