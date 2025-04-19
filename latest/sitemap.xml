@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://jayqi.github.io/typenames/stable/</loc>
+         <loc>https://typenames.drivendata.org/stable/</loc>
          <lastmod>2025-04-19</lastmod>
     </url>
     <url>
-         <loc>https://jayqi.github.io/typenames/stable/api-reference/</loc>
+         <loc>https://typenames.drivendata.org/stable/api-reference/</loc>
          <lastmod>2025-04-19</lastmod>
     </url>
     <url>
-         <loc>https://jayqi.github.io/typenames/stable/changelog/</loc>
+         <loc>https://typenames.drivendata.org/stable/changelog/</loc>
          <lastmod>2025-04-19</lastmod>
     </url>
 </urlset>
