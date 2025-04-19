@@ -55,6 +55,7 @@ tests = [
   "pytest-cov",
 ]
 docs = [
+  "markdown-callouts",
   "mkdocs",
   "mkdocs-macros-plugin",
   "mkdocs-material>=9.5.0",

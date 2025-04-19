@@ -72,7 +72,7 @@ class TypenamesConfig:
 
     union_syntax: UnionSyntax = UnionSyntax.AS_GIVEN
     optional_syntax: OptionalSyntax = OptionalSyntax.AS_GIVEN
-    standard_collection_syntax: StandardCollectionSyntax = StandardCollectionSyntax.AS_GIVEN
+    standard_collection_syntax: StandardCollectionSyntax = StandardCollectionSyntax.STANDARD_CLASS
     remove_modules: List[Union[str, re.Pattern]] = dataclasses.field(
         default_factory=lambda: list(DEFAULT_REMOVE_MODULES)
     )

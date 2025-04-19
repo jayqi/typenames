@@ -2,6 +2,7 @@
 
 [![Docs Status](https://img.shields.io/badge/docs-stable-informational)](https://typenames.drivendata.org/)
 [![PyPI](https://img.shields.io/pypi/v/typenames.svg)](https://pypi.org/project/typenames/)
+[![conda-forge](https://img.shields.io/conda/vn/conda-forge/typenames.svg)](https://github.com/conda-forge/typenames-feedstock)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/typenames)](https://pypi.org/project/typenames/)
 [![tests](https://github.com/drivendataorg/typenames/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/drivendataorg/typenames/actions/workflows/tests.yml?query=branch%3Amain)
 [![codecov](https://codecov.io/gh/drivendataorg/typenames/branch/main/graph/badge.svg)](https://codecov.io/gh/drivendataorg/typenames)
@@ -51,6 +52,12 @@ typenames is available on [PyPI](https://pypi.org/project/typenames/):
 pip install typenames
 ```
 
+It is also available on [conda-forge](https://github.com/conda-forge/typenames-feedstock):
+
+```bash
+conda install typenames --channel conda-forge
+```
+
 ## Basic Usage
 
 The main way to use the library is the `typenames` function. Calling it on a type annotation renders a string representation:
@@ -93,9 +100,11 @@ This option controls how unions are rendered. It supports both the `typing.Union
 - **`"or_operator"`**: render all type unions using the `|` operator.
 - **`"special_form"`**: render all type unions using the `typing.Union` special form.
 
-Note that runtime use of the `|` operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la [PEP 563](https://peps.python.org/pep-0563/) with `from __future__ import__annotations__`. Support for the `|` operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.
+> [!NOTE]
+> Runtime use of the `|` operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la [PEP 563](https://peps.python.org/pep-0563/) with `from __future__ import__annotations__`. Support for the `|` operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.
 
-**Limitations:** Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of `|` operator syntax and any typing module types will result in a `typing.Union` union, so `as_given` will always render such inputs with `typing.Union`.
+> [!IMPORTANT]
+> **Limitations:** Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of `|` operator syntax and any typing module types will result in a `typing.Union` union, so `as_given` will always render such inputs with `typing.Union`.
 
 
 ### Optional Syntax (`optional_syntax`)
@@ -107,24 +116,29 @@ This option controls how optional types are rendered. It supports both the `typi
 - **`"union_special_form"`**: render all optional types using the `typing.Optional` special form
 - **`"optional_special_form"`**: render all optional types using the `typing.Optional` special form
 
-Note that runtime use of the `|` operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la [PEP 563](https://peps.python.org/pep-0563/) with `from __future__ import__annotations__`. Support for the `|` operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.
+> [!NOTE]
+> Runtime use of the `|` operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la [PEP 563](https://peps.python.org/pep-0563/) with `from __future__ import__annotations__`. Support for the `|` operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.
 
-**Limitations:**
-
-- Python automatically converts `typing.Union[..., None]` to `typing.Optional[...]` when evaluating at runtime. Since typenames uses runtime type objects, it will only see the result using `typing.Optional` and not know the form of your original input.
-- Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of `|` operator syntax and any typing module types will result in a `typing.Union` union, so `as_given` will always render such inputs with typing module special forms.
-- The `typing.Optional` special form only accepts exactly one parameter. By default, typenames will render cases with multiple parameters with `Optional[Union[...]]`. You can use the `union_syntax` option to control the inner union's syntax.
+> [!IMPORTANT]
+> **Limitations:**
+>
+> - Python automatically converts `typing.Union[..., None]` to `typing.Optional[...]` when evaluating at runtime. Since typenames uses runtime type objects, it will only see the result using `typing.Optional` and not know the form of your original input.
+> - Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of `|` operator syntax and any typing module types will result in a `typing.Union` union, so `as_given` will always render such inputs with typing module special forms.
+> - The `typing.Optional` special form only accepts exactly one parameter. By default, typenames will render cases with multiple parameters with `Optional[Union[...]]`. You can use the `union_syntax` option to control the inner union's syntax.
 
 
 ### Standard Collection Syntax (`standard_collection_syntax`)
 
+_Default value changed in v2.0.0_
+
 This option controls how parameterized standard collection generic types are rendered. It supports both the typing module's generic aliases (e.g., `typing.List[...]`) and the standard class (e.g., `list[...]`) syntax from [PEP 585](https://peps.python.org/pep-0585/). Valid options are defined by the enum `StandardCollectionSyntax` and include:
 
-- **`"as_given"` (default)**: render the parameterized generic type as it is given without changing syntax
-- **`"standard_class"`**: render all parameterized standard collection generic types using their class
+- **`"standard_class"` (default)**: render all parameterized standard collection generic types using their class
+- **`"as_given"`**: render the parameterized generic type as it is given without changing syntax
 - **`"typing_module"`**: render all parameterized standard collection generic types using the typing module's generic alias
 
-Note that runtime use of standard collection classes as parameterized generic types is new in Python 3.9. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la [PEP 563](https://peps.python.org/pep-0563/) with `from __future__ import__annotations__`. Support for standard collection classes for parameterized generic types is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.
+> [!NOTE]
+> The typing module's generic aliases are [deprecated](https://docs.python.org/3/library/typing.html#deprecated-aliases) in favor of parameterizing standard collection classes. Parameterizing standard collection classes was added in Python 3.9 and is available in all currently supported versions of Python.
 
 ### Removing Module Names (`remove_modules`)
 
@@ -157,10 +171,15 @@ If you are trying to _add_ additional modules to this option (rather than overri
 from typing import Optional
 from typenames import typenames, DEFAULT_REMOVE_MODULES, BaseNode
 
+# Default removals
 typenames(Optional[BaseNode])
 #> 'Optional[typenames.BaseNode]'
+
+# Replace default with 'typenames'
 typenames(Optional[BaseNode], remove_modules=["typenames"])
 #> 'typing.Optional[BaseNode]'
+
+# Extend default with 'typenames'
 typenames(
     Optional[BaseNode],
     remove_modules=DEFAULT_REMOVE_MODULES + ["typenames"],
@@ -172,7 +191,7 @@ To remove all module names, you can use `REMOVE_ALL_MODULES`, which contains the
 
 ### Annotated (`include_extras`)
 
-This option controls whether to render `typing.Annotated` (or `typing_extensions.Annotated` if using Python 3.8) and the extra metadata. `Annotated` is a [typing special form](https://docs.python.org/3/library/typing.html#typing.Annotated) introduced in Python 3.9 and originally specified by [PEP 593](https://peps.python.org/pep-0593/). Many libraries like [Pydantic](https://docs.pydantic.dev/latest/concepts/fields/#using-annotated), [FastAPI](https://fastapi.tiangolo.com/python-types/#type-hints-with-metadata-annotations), and [Typer](https://typer.tiangolo.com/tutorial/arguments/optional/#an-alternative-cli-argument-declaration) use it to attach metadata to type annotations that are used at runtime.
+This option controls whether to render `Annotated` and the extra metadata. `typing.Annotated` is a [typing special form](https://docs.python.org/3/library/typing.html#typing.Annotated) introduced in Python 3.9 and originally specified by [PEP 593](https://peps.python.org/pep-0593/). Many libraries like [Pydantic](https://docs.pydantic.dev/latest/concepts/fields/#using-annotated), [FastAPI](https://fastapi.tiangolo.com/python-types/#type-hints-with-metadata-annotations), and [Typer](https://typer.tiangolo.com/tutorial/arguments/optional/#an-alternative-cli-argument-declaration) use it to attach metadata to type annotations that are used at runtime.
 
 By default, typenames will _not_ render `Annotated` and extra metadata. Set `include_extras=True` to render them.
 

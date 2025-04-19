@@ -49,27 +49,27 @@ class MyTypedDict(typing.TypedDict):
 
 cases = [
     (int, "int"),
-    (typing.List[int], "List[int]"),
-    (typing.Tuple[str, int], "Tuple[str, int]"),
+    (typing.List[int], "list[int]"),
+    (typing.Tuple[str, int], "tuple[str, int]"),
     (typing.Optional[int], "Optional[int]"),
     (MyClass, "tests.test_typenames.MyClass"),
     (OuterClass.InnerClass, "tests.test_typenames.OuterClass.InnerClass"),
-    (typing.List[MyClass], "List[tests.test_typenames.MyClass]"),
-    (typing.Optional[typing.List[MyClass]], "Optional[List[tests.test_typenames.MyClass]]"),
+    (typing.List[MyClass], "list[tests.test_typenames.MyClass]"),
+    (typing.Optional[typing.List[MyClass]], "Optional[list[tests.test_typenames.MyClass]]"),
     (typing.Union[float, int], "Union[float, int]"),
-    (typing.Dict[str, int], "Dict[str, int]"),
+    (typing.Dict[str, int], "dict[str, int]"),
     (typing.Any, "Any"),
-    (typing.Dict[str, typing.Any], "Dict[str, Any]"),
+    (typing.Dict[str, typing.Any], "dict[str, Any]"),
     (typing.Callable[..., str], "Callable[..., str]"),
     (typing.Callable[[int], str], "Callable[[int], str]"),
     (typing.Callable[[int, float], str], "Callable[[int, float], str]"),
     (MyGeneric[int], "tests.test_typenames.MyGeneric[int]"),
     (MyEnum, "tests.test_typenames.MyEnum"),
-    (typing.List["int"], "List[int]"),
-    (typing.List["typing.Any"], "List[Any]"),
-    (typing.List["enum.Enum"], "List[enum.Enum]"),
-    (typing.List["MyClass"], "List[MyClass]"),
-    (typing.List["OuterClass.InnerClass"], "List[OuterClass.InnerClass]"),
+    (typing.List["int"], "list[int]"),
+    (typing.List["typing.Any"], "list[Any]"),
+    (typing.List["enum.Enum"], "list[enum.Enum]"),
+    (typing.List["MyClass"], "list[MyClass]"),
+    (typing.List["OuterClass.InnerClass"], "list[OuterClass.InnerClass]"),
     # Python 3.8 adds typing.Literal, typing.Final, typing.TypedDict
     (typing.Literal["s", 0, MyEnum.MEMBER1], "Literal['s', 0, MyEnum.MEMBER1]"),
     (typing.Final[int], "Final[int]"),
@@ -78,7 +78,7 @@ cases = [
     # typing.Annotated
     (list[int], "list[int]"),
     (list[tuple[int, str]], "list[tuple[int, str]]"),
-    (list[typing.Tuple[int, str]], "list[Tuple[int, str]]"),
+    (list[typing.Tuple[int, str]], "list[tuple[int, str]]"),
     (
         list[collections.defaultdict[str, list[int]]],
         "list[defaultdict[str, list[int]]]",
@@ -236,22 +236,17 @@ def test_optional_multiple_params():
         )
 
 
-def test_standard_collection_syntax_standard_class():
-    """Test that forcing standard_collection_syntax='standard_class' results in standard class
-    output."""
-    assert typenames(typing.List[int], standard_collection_syntax="standard_class") == "list[int]"
-
-    if sys.version_info >= (3, 9):
-        assert typenames(list[int], standard_collection_syntax="standard_class") == "list[int]"
+def test_standard_collection_syntax_as_given():
+    """Test that setting standard_collection_syntax='as_given' keeps input syntax."""
+    assert typenames(typing.List[int], standard_collection_syntax="as_given") == "List[int]"
+    assert typenames(list[int], standard_collection_syntax="as_given") == "list[int]"
 
 
 def test_standard_collection_syntax_typing_module():
     """Test that forcing standard_collection_syntax='typing_module' results in typing module
     generic aliases."""
     assert typenames(typing.List[int], standard_collection_syntax="typing_module") == "List[int]"
-
-    if sys.version_info >= (3, 9):
-        assert typenames(list[int], standard_collection_syntax="typing_module") == "List[int]"
+    assert typenames(list[int], standard_collection_syntax="typing_module") == "List[int]"
 
 
 def test_annotated_include_extras():
