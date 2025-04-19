@@ -89,4 +89,4 @@ jobs:
     steps:
       - name: Trigger build on Render
         run: |
-          curl {{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          curl ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
