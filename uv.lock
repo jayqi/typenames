@@ -1991,7 +1991,7 @@ dev = [
     { name = "mike" },
     { name = "mkdocs" },
     { name = "mkdocs-macros-plugin" },
-    { name = "mkdocs-material" },
+    { name = "mkdocs-material", specifier = ">=9.5.0" },
     { name = "mkdocstrings", extras = ["python"] },
     { name = "reprexlite" },
     { name = "ruff" },
@@ -2002,7 +2002,7 @@ docs = [
     { name = "mike" },
     { name = "mkdocs" },
     { name = "mkdocs-macros-plugin" },
-    { name = "mkdocs-material" },
+    { name = "mkdocs-material", specifier = ">=9.5.0" },
     { name = "mkdocstrings", extras = ["python"] },
 ]
 inspect-types = [

@@ -57,7 +57,7 @@ tests = [
 docs = [
   "mkdocs",
   "mkdocs-macros-plugin",
-  "mkdocs-material",
+  "mkdocs-material>=9.5.0",
   "mike",
   "mkdocstrings[python]",
   "mdx-truly-sane-lists",
