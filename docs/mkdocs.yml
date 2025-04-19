@@ -1,7 +1,7 @@
 site_name: typenames
-site_url: https://jayqi.github.io/typenames
+site_url: https://typenames.drivendata.org/
 site_description: String representations of Python type annotations
-repo_url: https://github.com/jayqi/typenames
+repo_url: https://github.com/drivendataorg/typenames
 
 nav:
   - Home: "index.md"
@@ -11,20 +11,29 @@ nav:
 theme:
   name: material
   palette:
-    # Palette toggle for dark mode
-    - scheme: slate
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
       primary: indigo
       accent: blue
       toggle:
-        icon: material/brightness-4
+        icon: material/brightness-auto
         name: Switch to light mode
     # Palette toggle for light mode
-    - scheme: default
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: indigo
       accent: blue
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
 
 extra_css:
   - css/extra.css
@@ -39,7 +48,8 @@ markdown_extensions:
   - tables:
 
 plugins:
-  - search
+  - search:
+  - macros:
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -60,8 +70,18 @@ plugins:
             show_signature_annotations: true
             # Additional options
             show_source: true
+  - mike:
+      alias_type: copy
+      canonical_version: stable
+      version_selector: true
 
 extra:
   version:
     provider: mike
     default: stable
+    alias: true
+
+watch:
+  - "../typenames"
+  - "../README.md"
+  - "../CHANGELOG.md"
