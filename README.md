@@ -103,7 +103,8 @@ This option controls how unions are rendered. It supports both the `typing.Union
 > [!NOTE]
 > Runtime use of the `|` operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la [PEP 563](https://peps.python.org/pep-0563/) with `from __future__ import__annotations__`. Support for the `|` operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.
 
-**Limitations:** Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of `|` operator syntax and any typing module types will result in a `typing.Union` union, so `as_given` will always render such inputs with `typing.Union`.
+> [!IMPORTANT]
+> **Limitations:** Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of `|` operator syntax and any typing module types will result in a `typing.Union` union, so `as_given` will always render such inputs with `typing.Union`.
 
 
 ### Optional Syntax (`optional_syntax`)
@@ -118,14 +119,17 @@ This option controls how optional types are rendered. It supports both the `typi
 > [!NOTE]
 > Runtime use of the `|` operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la [PEP 563](https://peps.python.org/pep-0563/) with `from __future__ import__annotations__`. Support for the `|` operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.
 
-**Limitations:**
-
-- Python automatically converts `typing.Union[..., None]` to `typing.Optional[...]` when evaluating at runtime. Since typenames uses runtime type objects, it will only see the result using `typing.Optional` and not know the form of your original input.
-- Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of `|` operator syntax and any typing module types will result in a `typing.Union` union, so `as_given` will always render such inputs with typing module special forms.
-- The `typing.Optional` special form only accepts exactly one parameter. By default, typenames will render cases with multiple parameters with `Optional[Union[...]]`. You can use the `union_syntax` option to control the inner union's syntax.
+> [!IMPORTANT]
+> **Limitations:**
+>
+> - Python automatically converts `typing.Union[..., None]` to `typing.Optional[...]` when evaluating at runtime. Since typenames uses runtime type objects, it will only see the result using `typing.Optional` and not know the form of your original input.
+> - Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of `|` operator syntax and any typing module types will result in a `typing.Union` union, so `as_given` will always render such inputs with typing module special forms.
+> - The `typing.Optional` special form only accepts exactly one parameter. By default, typenames will render cases with multiple parameters with `Optional[Union[...]]`. You can use the `union_syntax` option to control the inner union's syntax.
 
 
 ### Standard Collection Syntax (`standard_collection_syntax`)
+
+_Default value changed in v2.0.0_
 
 This option controls how parameterized standard collection generic types are rendered. It supports both the typing module's generic aliases (e.g., `typing.List[...]`) and the standard class (e.g., `list[...]`) syntax from [PEP 585](https://peps.python.org/pep-0585/). Valid options are defined by the enum `StandardCollectionSyntax` and include:
 
