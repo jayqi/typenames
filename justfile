@@ -56,3 +56,11 @@ docs:
 # Serve docs
 docs-serve:
     uv run --directory docs mkdocs serve
+
+# Pull gh-pages branch from GitHub to local
+pull-gh-pages:
+    git fetch origin gh-pages:gh-pages
+
+# Push gh-pages branch from local to GitHub
+push-gh-pages:
+    git push origin gh-pages:gh-pages
