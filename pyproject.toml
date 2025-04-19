@@ -23,11 +23,11 @@ requires-python = ">=3.9"
 tests = ["pytest>=6"]
 
 [project.urls]
-"Homepage" = "https://jayqi.github.io/typenames/"
+"Homepage" = "https://typenames.drivendata.org/"
 "Repository" = "https://github.com/drivendataorg/typenames"
-"Documentation" = "https://jayqi.github.io/typenames/"
+"Documentation" = "https://typenames.drivendata.org/"
 "Bug Tracker" = "https://github.com/drivendataorg/typenames/issues"
-"Changelog" = "https://jayqi.github.io/typenames/stable/changelog/"
+"Changelog" = "https://typenames.drivendata.org/stable/changelog/"
 
 [build-system]
 requires = ["hatchling"]

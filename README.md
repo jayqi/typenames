@@ -1,6 +1,6 @@
 # typenames : String representations of type annotations
 
-[![Docs Status](https://img.shields.io/badge/docs-stable-informational)](https://jayqi.github.io/typenames/)
+[![Docs Status](https://img.shields.io/badge/docs-stable-informational)](https://typenames.drivendata.org/)
 [![PyPI](https://img.shields.io/pypi/v/typenames.svg)](https://pypi.org/project/typenames/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/typenames)](https://pypi.org/project/typenames/)
 [![tests](https://github.com/drivendataorg/typenames/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/drivendataorg/typenames/actions/workflows/tests.yml?query=branch%3Amain)
