@@ -84,6 +84,25 @@ extra:
     provider: mike
     default: stable
     alias: true
+  social:
+    - icon: fontawesome/solid/square-poll-horizontal
+      link: https://www.drivendata.org/
+      name: DrivenData.org
+    - icon: fontawesome/solid/laptop-code
+      link: https://www.drivendata.co/
+      name: DrivenData Labs
+    - icon: fontawesome/brands/github
+      link: https://github.com/drivendataorg
+      name: DrivenData on GitHub
+    - icon: fontawesome/brands/bluesky
+      link: https://bsky.app/profile/drivendata.org
+      name: DrivenData on Bluesky
+  generator: False
+
+copyright: |
+  <a href="https://drivendata.co/open-source/"><img style="height: 1.618em;" src="https://drivendata-public-assets.s3.us-east-1.amazonaws.com/logo-white.svg"></a>
+  <br>typenames is a <strong><a href="https://drivendata.co/open-source/">DrivenData</a></strong> project
+  </div><div>Documentation made with <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>
 
 watch:
   - "../typenames"
