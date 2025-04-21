@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{# https://squidfunk.github.io/mkdocs-material/customization/#overriding-blocks #}
+
+{% block outdated %}
+You are not viewing the current stable version.
+<a href="{{ '../' ~ base_url }}">
+    <strong>Click here to go to stable.</strong>
+</a>
+{% endblock %}
