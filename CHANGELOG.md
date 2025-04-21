@@ -1,11 +1,11 @@
 # Changelog
 
-## v2.0.0 (Unreleased)
+## v2.0.0 (2025-04-21)
 
 - Changed the default for [`standard_collection_syntax`](./README.md#standard-collection-syntax-standard_collection_syntax) from `"as_given"` to `"standard_class"`. This change is intended to encourage the use of the standard collection syntax, since all currently supported Python versions support it and the typing module aliases are [deprecated](https://docs.python.org/3/library/typing.html#deprecated-aliases).
 - Removed support for Python 3.8.
 - Added support for Python 3.13.
-- Removed deprecated `LITERAL_TYPE_SUPPORTED` flag. (Deprecated in v1.1.0.)
+- Removed deprecated `LITERAL_TYPE_SUPPORTED` flag. (Deprecated in [v1.1.0](#v110-2024-03-08).)
 
 _Note: the typenames repository has moved to the [drivendataorg](https://github.com/drivendataorg/typenames) GitHub organization. The documentation website has also moved to a [new address](https://typenames.drivendata.org)._
 

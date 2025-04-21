@@ -1,6 +1,6 @@
 [project]
 name = "typenames"
-version = "1.4.0"
+version = "2.0.0"
 description = "String representations of type annotations."
 readme = "README.md"
 authors = [{ name = "Jay Qi", email = "jayqi.opensource@gmail.com" }]
