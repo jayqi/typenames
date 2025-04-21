@@ -605,11 +605,12 @@ You are not viewing the current stable version.
 
 
 <h1 id="typenames-string-representations-of-type-annotations">typenames : String representations of type annotations<a class="headerlink" href="#typenames-string-representations-of-type-annotations" title="Permanent link">&para;</a></h1>
-<p><a href="https://jayqi.github.io/typenames/"><img alt="Docs Status" src="https://img.shields.io/badge/docs-stable-informational" /></a>
+<p><a href="https://typenames.drivendata.org/"><img alt="Docs Status" src="https://img.shields.io/badge/docs-stable-informational" /></a>
 <a href="https://pypi.org/project/typenames/"><img alt="PyPI" src="https://img.shields.io/pypi/v/typenames.svg" /></a>
+<a href="https://github.com/conda-forge/typenames-feedstock"><img alt="conda-forge" src="https://img.shields.io/conda/vn/conda-forge/typenames.svg" /></a>
 <a href="https://pypi.org/project/typenames/"><img alt="Supported Python versions" src="https://img.shields.io/pypi/pyversions/typenames" /></a>
-<a href="https://github.com/jayqi/typenames/actions/workflows/tests.yml?query=branch%3Amain"><img alt="tests" src="https://github.com/jayqi/typenames/actions/workflows/tests.yml/badge.svg?branch=main" /></a>
-<a href="https://codecov.io/gh/jayqi/typenames"><img alt="codecov" src="https://codecov.io/gh/jayqi/typenames/branch/main/graph/badge.svg" /></a></p>
+<a href="https://github.com/drivendataorg/typenames/actions/workflows/tests.yml?query=branch%3Amain"><img alt="tests" src="https://github.com/drivendataorg/typenames/actions/workflows/tests.yml/badge.svg?branch=main" /></a>
+<a href="https://codecov.io/gh/drivendataorg/typenames"><img alt="codecov" src="https://codecov.io/gh/drivendataorg/typenames/branch/main/graph/badge.svg" /></a></p>
 <p><strong>typenames</strong> is a configurable Python library for creating string representations of type annotations. By default, it produces compact representations by removing standard library module names. Configurable options include standardizing on <code>|</code> operator syntax for unions or standard collections classes for generics.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">typenames</span>
@@ -670,12 +671,16 @@ You are not viewing the current stable version.
 </ul>
 <p>No need for string manipulation to get what you want!</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<p>typenames is available on PyPI:</p>
+<p>typenames is available on <a href="https://pypi.org/project/typenames/">PyPI</a>:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>typenames
+</code></pre></div>
+<p>It is also available on <a href="https://github.com/conda-forge/typenames-feedstock">conda-forge</a>:</p>
+<div class="highlight"><pre><span></span><code>conda<span class="w"> </span>install<span class="w"> </span>typenames<span class="w"> </span>--channel<span class="w"> </span>conda-forge
 </code></pre></div>
 <h2 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
 <p>The main way to use the library is the <code>typenames</code> function. Calling it on a type annotation renders a string representation:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">collections.abc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">typenames</span>
 
 <span class="n">typenames</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
@@ -704,8 +709,14 @@ You are not viewing the current stable version.
 <li><strong><code>"or_operator"</code></strong>: render all type unions using the <code>|</code> operator.</li>
 <li><strong><code>"special_form"</code></strong>: render all type unions using the <code>typing.Union</code> special form.</li>
 </ul>
-<p>Note that runtime use of the <code>|</code> operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for the <code>|</code> operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Runtime use of the <code>|</code> operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for the <code>|</code> operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
 <p><strong>Limitations:</strong> Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of <code>|</code> operator syntax and any typing module types will result in a <code>typing.Union</code> union, so <code>as_given</code> will always render such inputs with <code>typing.Union</code>.</p>
+</div>
 <h3 id="optional-syntax-optional_syntax">Optional Syntax (<code>optional_syntax</code>)<a class="headerlink" href="#optional-syntax-optional_syntax" title="Permanent link">&para;</a></h3>
 <p>This option controls how optional types are rendered. It supports both the <code>typing.Optional</code> special form and the <code>|</code> operator (bitwise or) syntax from <a href="https://peps.python.org/pep-0604/">PEP 604</a>. Valid options are defined by the enum <code>OptionalSyntax</code> and include:</p>
 <ul>
@@ -714,21 +725,31 @@ You are not viewing the current stable version.
 <li><strong><code>"union_special_form"</code></strong>: render all optional types using the <code>typing.Optional</code> special form</li>
 <li><strong><code>"optional_special_form"</code></strong>: render all optional types using the <code>typing.Optional</code> special form</li>
 </ul>
-<p>Note that runtime use of the <code>|</code> operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for the <code>|</code> operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Runtime use of the <code>|</code> operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for the <code>|</code> operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
 <p><strong>Limitations:</strong></p>
 <ul>
 <li>Python automatically converts <code>typing.Union[..., None]</code> to <code>typing.Optional[...]</code> when evaluating at runtime. Since typenames uses runtime type objects, it will only see the result using <code>typing.Optional</code> and not know the form of your original input.</li>
 <li>Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of <code>|</code> operator syntax and any typing module types will result in a <code>typing.Union</code> union, so <code>as_given</code> will always render such inputs with typing module special forms.</li>
 <li>The <code>typing.Optional</code> special form only accepts exactly one parameter. By default, typenames will render cases with multiple parameters with <code>Optional[Union[...]]</code>. You can use the <code>union_syntax</code> option to control the inner union's syntax.</li>
 </ul>
+</div>
 <h3 id="standard-collection-syntax-standard_collection_syntax">Standard Collection Syntax (<code>standard_collection_syntax</code>)<a class="headerlink" href="#standard-collection-syntax-standard_collection_syntax" title="Permanent link">&para;</a></h3>
+<p><em>Default value changed in v2.0.0</em></p>
 <p>This option controls how parameterized standard collection generic types are rendered. It supports both the typing module's generic aliases (e.g., <code>typing.List[...]</code>) and the standard class (e.g., <code>list[...]</code>) syntax from <a href="https://peps.python.org/pep-0585/">PEP 585</a>. Valid options are defined by the enum <code>StandardCollectionSyntax</code> and include:</p>
 <ul>
-<li><strong><code>"as_given"</code> (default)</strong>: render the parameterized generic type as it is given without changing syntax</li>
-<li><strong><code>"standard_class"</code></strong>: render all parameterized standard collection generic types using their class</li>
+<li><strong><code>"standard_class"</code> (default)</strong>: render all parameterized standard collection generic types using their class</li>
+<li><strong><code>"as_given"</code></strong>: render the parameterized generic type as it is given without changing syntax</li>
 <li><strong><code>"typing_module"</code></strong>: render all parameterized standard collection generic types using the typing module's generic alias</li>
 </ul>
-<p>Note that runtime use of standard collection classes as parameterized generic types is new in Python 3.9. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for standard collection classes for parameterized generic types is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The typing module's generic aliases are <a href="https://docs.python.org/3/library/typing.html#deprecated-aliases">deprecated</a> in favor of parameterizing standard collection classes. Parameterizing standard collection classes was added in Python 3.9 and is available in all currently supported versions of Python.</p>
+</div>
 <h3 id="removing-module-names-remove_modules">Removing Module Names (<code>remove_modules</code>)<a class="headerlink" href="#removing-module-names-remove_modules" title="Permanent link">&para;</a></h3>
 <p>This option controls how module names are removed from the rendered output. It takes a list of inputs, which can either be a string of the module name or a <code>re.Pattern</code> regex pattern directly (the result of <code>re.compile</code>). String inputs are templated into the following regex pattern:</p>
 <div class="highlight"><pre><span></span><code><span class="n">module</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Given module name</span>
@@ -750,10 +771,15 @@ You are not viewing the current stable version.
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">typenames</span><span class="p">,</span> <span class="n">DEFAULT_REMOVE_MODULES</span><span class="p">,</span> <span class="n">BaseNode</span>
 
+<span class="c1"># Default removals</span>
 <span class="n">typenames</span><span class="p">(</span><span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">])</span>
 <span class="c1">#&gt; &#39;Optional[typenames.BaseNode]&#39;</span>
+
+<span class="c1"># Replace default with &#39;typenames&#39;</span>
 <span class="n">typenames</span><span class="p">(</span><span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">],</span> <span class="n">remove_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;typenames&quot;</span><span class="p">])</span>
 <span class="c1">#&gt; &#39;typing.Optional[BaseNode]&#39;</span>
+
+<span class="c1"># Extend default with &#39;typenames&#39;</span>
 <span class="n">typenames</span><span class="p">(</span>
     <span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">],</span>
     <span class="n">remove_modules</span><span class="o">=</span><span class="n">DEFAULT_REMOVE_MODULES</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;typenames&quot;</span><span class="p">],</span>
@@ -762,7 +788,7 @@ You are not viewing the current stable version.
 </code></pre></div>
 <p>To remove all module names, you can use <code>REMOVE_ALL_MODULES</code>, which contains the pattern <code>re.compile(r"^(&lt;?\w+&gt;?\.)+")</code>.</p>
 <h3 id="annotated-include_extras">Annotated (<code>include_extras</code>)<a class="headerlink" href="#annotated-include_extras" title="Permanent link">&para;</a></h3>
-<p>This option controls whether to render <code>typing.Annotated</code> (or <code>typing_extensions.Annotated</code> if using Python 3.8) and the extra metadata. <code>Annotated</code> is a <a href="https://docs.python.org/3/library/typing.html#typing.Annotated">typing special form</a> introduced in Python 3.9 and originally specified by <a href="https://peps.python.org/pep-0593/">PEP 593</a>. Many libraries like <a href="https://docs.pydantic.dev/latest/concepts/fields/#using-annotated">Pydantic</a>, <a href="https://fastapi.tiangolo.com/python-types/#type-hints-with-metadata-annotations">FastAPI</a>, and <a href="https://typer.tiangolo.com/tutorial/arguments/optional/#an-alternative-cli-argument-declaration">Typer</a> use it to attach metadata to type annotations that are used at runtime.</p>
+<p>This option controls whether to render <code>Annotated</code> and the extra metadata. <code>typing.Annotated</code> is a <a href="https://docs.python.org/3/library/typing.html#typing.Annotated">typing special form</a> introduced in Python 3.9 and originally specified by <a href="https://peps.python.org/pep-0593/">PEP 593</a>. Many libraries like <a href="https://docs.pydantic.dev/latest/concepts/fields/#using-annotated">Pydantic</a>, <a href="https://fastapi.tiangolo.com/python-types/#type-hints-with-metadata-annotations">FastAPI</a>, and <a href="https://typer.tiangolo.com/tutorial/arguments/optional/#an-alternative-cli-argument-declaration">Typer</a> use it to attach metadata to type annotations that are used at runtime.</p>
 <p>By default, typenames will <em>not</em> render <code>Annotated</code> and extra metadata. Set <code>include_extras=True</code> to render them.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">typenames</span>

@@ -378,6 +378,15 @@ You are not viewing the current stable version.
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v200-2025-04-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      v2.0.0 (2025-04-21)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v130-2024-07-16" class="md-nav__link">
     <span class="md-ellipsis">
       v1.3.0 (2024-07-16)
@@ -448,6 +457,15 @@ You are not viewing the current stable version.
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v200-2025-04-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      v2.0.0 (2025-04-21)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v130-2024-07-16" class="md-nav__link">
     <span class="md-ellipsis">
       v1.3.0 (2024-07-16)
@@ -503,22 +521,32 @@ You are not viewing the current stable version.
 
 
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h2 id="v200-2025-04-21">v2.0.0 (2025-04-21)<a class="headerlink" href="#v200-2025-04-21" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Changed the default for <a href="../#standard-collection-syntax-standard_collection_syntax"><code>standard_collection_syntax</code></a> from <code>"as_given"</code> to <code>"standard_class"</code>. This change is intended to encourage the use of the standard collection syntax, since all currently supported Python versions support it and the typing module aliases are <a href="https://docs.python.org/3/library/typing.html#deprecated-aliases">deprecated</a>.</li>
+<li>Removed support for Python 3.8.</li>
+<li>Added support for Python 3.13.</li>
+<li>Removed deprecated <code>LITERAL_TYPE_SUPPORTED</code> flag. (Deprecated in <a href="#v110-2024-03-08">v1.1.0</a>.)</li>
+</ul>
+<p><em>Note: the typenames repository has moved to the <a href="https://github.com/drivendataorg/typenames">drivendataorg</a> GitHub organization. The documentation website has also moved to a <a href="https://typenames.drivendata.org">new address</a>.</em></p>
 <h2 id="v130-2024-07-16">v1.3.0 (2024-07-16)<a class="headerlink" href="#v130-2024-07-16" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Changed how <code>typenames</code> handles type annotations that include <code>typing.Annotated</code> or <code>typing_extensions.Annotated</code>. (<a href="https://github.com/jayqi/typenames/pull/8">PR #8</a>, <a href="https://github.com/jayqi/typenames/issues/7">Issue #7</a>)
-    - Added <code>include_extras</code> configuration option to <code>typenames</code> to control whether <code>Annotated</code> and metadata should be shown.
-    - By default, <code>include_extras</code> is <code>False</code>, and <code>Annotated</code> and extra metadata will <em>not</em> be rendered.</li>
+<li>Changed how <code>typenames</code> handles type annotations that include <code>typing.Annotated</code> or <code>typing_extensions.Annotated</code>. (<a href="https://github.com/drivendataorg/typenames/pull/8">PR #8</a>, <a href="https://github.com/drivendataorg/typenames/issues/7">Issue #7</a>)<ul>
+<li>Added <code>include_extras</code> configuration option to <code>typenames</code> to control whether <code>Annotated</code> and metadata should be shown.</li>
+<li>By default, <code>include_extras</code> is <code>False</code>, and <code>Annotated</code> and extra metadata will <em>not</em> be rendered.</li>
+</ul>
+</li>
 </ul>
 <h2 id="v120-2024-03-19">v1.2.0 (2024-03-19)<a class="headerlink" href="#v120-2024-03-19" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Fixed the type signatures of <code>typenames</code> and <code>parse_type_tree</code> to reflect the typing of input type annotations, according to static type checkers. (<a href="https://github.com/jayqi/typenames/pull/6">PR #6</a>)</li>
-<li>Added <a href="https://peps.python.org/pep-0561/#packaging-type-information">PEP 561 <code>py.typed</code> marker file</a> to indicate that the package supports type checking. (<a href="https://github.com/jayqi/typenames/pull/6">PR #6</a>)</li>
+<li>Fixed the type signatures of <code>typenames</code> and <code>parse_type_tree</code> to reflect the typing of input type annotations, according to static type checkers. (<a href="https://github.com/drivendataorg/typenames/pull/6">PR #6</a>)</li>
+<li>Added <a href="https://peps.python.org/pep-0561/#packaging-type-information">PEP 561 <code>py.typed</code> marker file</a> to indicate that the package supports type checking. (<a href="https://github.com/drivendataorg/typenames/pull/6">PR #6</a>)</li>
 </ul>
 <h2 id="v110-2024-03-08">v1.1.0 (2024-03-08)<a class="headerlink" href="#v110-2024-03-08" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Changed <code>REMOVE_ALL_MODULES</code>'s regex pattern to also remove <code>&lt;locals&gt;</code> from rendered output. <code>&lt;locals&gt;</code> typically appears in a type's qualified name if the type was defined within the local scope of a function or class method. (<a href="https://github.com/jayqi/typenames/pull/4">PR #4</a>)</li>
-<li>Removed support for Python 3.7. (<a href="https://github.com/jayqi/typenames/pull/5">PR #5</a>)</li>
-<li>Deprecated <code>LITERAL_TYPE_SUPPORTED</code> flag, since typenames no longer supports Python versions where this is false. (<a href="https://github.com/jayqi/typenames/pull/5">PR #5</a>)</li>
+<li>Changed <code>REMOVE_ALL_MODULES</code>'s regex pattern to also remove <code>&lt;locals&gt;</code> from rendered output. <code>&lt;locals&gt;</code> typically appears in a type's qualified name if the type was defined within the local scope of a function or class method. (<a href="https://github.com/drivendataorg/typenames/pull/4">PR #4</a>)</li>
+<li>Removed support for Python 3.7. (<a href="https://github.com/drivendataorg/typenames/pull/5">PR #5</a>)</li>
+<li>Deprecated <code>LITERAL_TYPE_SUPPORTED</code> flag, since typenames no longer supports Python versions where this is false. (<a href="https://github.com/drivendataorg/typenames/pull/5">PR #5</a>)</li>
 </ul>
 <h2 id="v100-2023-02-20">v1.0.0 (2023-02-20)<a class="headerlink" href="#v100-2023-02-20" title="Permanent link">&para;</a></h2>
 <p>Initial release! 🎉</p>
