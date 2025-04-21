@@ -1,0 +1,896 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="String representations of Python type annotations">
+      
+      
+      
+        <link rel="canonical" href="https://typenames.drivendata.org/stable/">
+      
+      
+      
+        <link rel="next" href="api-reference/">
+      
+      
+      <link rel="icon" href="assets/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.11">
+    
+    
+      
+        <title>typenames</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.4af4bdda.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="css/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#typenames-string-representations-of-type-annotations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+You are not viewing the current stable version.
+<a href="../.">
+    <strong>Click here to go to stable.</strong>
+</a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="typenames" class="md-header__button md-logo" aria-label="typenames" data-md-component="logo">
+      
+  <img src="assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            typenames
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/drivendataorg/typenames" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="typenames" class="md-nav__button md-logo" aria-label="typenames" data-md-component="logo">
+      
+  <img src="assets/logo.svg" alt="logo">
+
+    </a>
+    typenames
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/drivendataorg/typenames" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-use-this-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use this library?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configurable-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurable options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configurable options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#union-syntax-union_syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Union Syntax (union_syntax)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-syntax-optional_syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optional Syntax (optional_syntax)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standard-collection-syntax-standard_collection_syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Collection Syntax (standard_collection_syntax)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-module-names-remove_modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Removing Module Names (remove_modules)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#annotated-include_extras" class="md-nav__link">
+    <span class="md-ellipsis">
+      Annotated (include_extras)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Changelog
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-use-this-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why use this library?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configurable-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurable options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configurable options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#union-syntax-union_syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Union Syntax (union_syntax)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-syntax-optional_syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Optional Syntax (optional_syntax)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#standard-collection-syntax-standard_collection_syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Collection Syntax (standard_collection_syntax)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-module-names-remove_modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Removing Module Names (remove_modules)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#annotated-include_extras" class="md-nav__link">
+    <span class="md-ellipsis">
+      Annotated (include_extras)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="typenames-string-representations-of-type-annotations">typenames : String representations of type annotations<a class="headerlink" href="#typenames-string-representations-of-type-annotations" title="Permanent link">&para;</a></h1>
+<p><a href="https://typenames.drivendata.org/"><img alt="Docs Status" src="https://img.shields.io/badge/docs-stable-informational" /></a>
+<a href="https://pypi.org/project/typenames/"><img alt="PyPI" src="https://img.shields.io/pypi/v/typenames.svg" /></a>
+<a href="https://github.com/conda-forge/typenames-feedstock"><img alt="conda-forge" src="https://img.shields.io/conda/vn/conda-forge/typenames.svg" /></a>
+<a href="https://pypi.org/project/typenames/"><img alt="Supported Python versions" src="https://img.shields.io/pypi/pyversions/typenames" /></a>
+<a href="https://github.com/drivendataorg/typenames/actions/workflows/tests.yml?query=branch%3Amain"><img alt="tests" src="https://github.com/drivendataorg/typenames/actions/workflows/tests.yml/badge.svg?branch=main" /></a>
+<a href="https://codecov.io/gh/drivendataorg/typenames"><img alt="codecov" src="https://codecov.io/gh/drivendataorg/typenames/branch/main/graph/badge.svg" /></a></p>
+<p><strong>typenames</strong> is a configurable Python library for creating string representations of type annotations. By default, it produces compact representations by removing standard library module names. Configurable options include standardizing on <code>|</code> operator syntax for unions or standard collections classes for generics.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">typenames</span>
+
+<span class="n">typenames</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="c1">#&gt; &#39;int&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;dict[str, Any]&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span><span class="p">)</span>
+<span class="c1">#&gt; &#39;str | int&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;Optional[str]&#39;</span>
+</code></pre></div>
+<h2 id="why-use-this-library">Why use this library?<a class="headerlink" href="#why-use-this-library" title="Permanent link">&para;</a></h2>
+<p>String representations of Python type objects, type aliases, and special typing forms are inconsistent and often verbose. Here are some comparisons using default settings against built-in string representations:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Input</th>
+<th style="text-align: center;">With <code>str(...)</code></th>
+<th style="text-align: center;">With <code>typenames(...)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>int</code></td>
+<td style="text-align: center;"><code>&lt;class 'int'&gt;</code></td>
+<td style="text-align: center;"><code>int</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>list</code></td>
+<td style="text-align: center;"><code>&lt;class 'list'&gt;</code></td>
+<td style="text-align: center;"><code>list</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>typing.Optional[int]</code></td>
+<td style="text-align: center;"><code>typing.Optional[int]</code></td>
+<td style="text-align: center;"><code>Optional[int]</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>collections.abc.Iterator[typing.Any]</code></td>
+<td style="text-align: center;"><code>collections.abc.Iterator[typing.Any]</code></td>
+<td style="text-align: center;"><code>Iterator[Any]</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>typing.Literal[MyEnum.NAME]</code></td>
+<td style="text-align: center;"><code>typing.Literal[&lt;MyEnum.NAME: 'value'&gt;]</code></td>
+<td style="text-align: center;"><code>Literal[MyEnum.NAME]</code></td>
+</tr>
+</tbody>
+</table>
+<p>typenames also has handy configurable functionality, such as:</p>
+<ul>
+<li>Forcing standardization on <code>|</code> operator union syntax (e.g., <code>Union[int, str]</code> to <code>int | str</code>) or vice versa</li>
+<li>Forcing standardization on <code>|</code> operator optional syntax (e.g., <code>Optional[int]</code> to <code>int | None</code>) or vice versa</li>
+<li>Forcing standardization on standard collection types for generics (e.g., <code>List[int]</code> to <code>list[int]</code>) or vice versa</li>
+<li>Controlling exactly which module names to remove using regex patterns.</li>
+</ul>
+<p>No need for string manipulation to get what you want!</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p>typenames is available on <a href="https://pypi.org/project/typenames/">PyPI</a>:</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>typenames
+</code></pre></div>
+<p>It is also available on <a href="https://github.com/conda-forge/typenames-feedstock">conda-forge</a>:</p>
+<div class="highlight"><pre><span></span><code>conda<span class="w"> </span>install<span class="w"> </span>typenames<span class="w"> </span>--channel<span class="w"> </span>conda-forge
+</code></pre></div>
+<h2 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h2>
+<p>The main way to use the library is the <code>typenames</code> function. Calling it on a type annotation renders a string representation:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">collections.abc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">typenames</span>
+
+<span class="n">typenames</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="c1">#&gt; &#39;int&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;Optional[str]&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]])</span>
+<span class="c1">#&gt; &#39;Callable[[int], tuple[str, ...]]</span>
+</code></pre></div>
+<p>Under the hood, typenames parses a type annotation as a tree structure. If you need to see the parsed tree, use the <code>parse_type_tree</code> function to return the root node. You can get the rendered string representation by calling <code>str(...)</code> on root node.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_type_tree</span>
+
+<span class="n">tree</span> <span class="o">=</span> <span class="n">parse_type_tree</span><span class="p">(</span><span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">]])</span>
+<span class="n">tree</span>
+<span class="c1">#&gt; &lt;GenericNode typing.Union[&lt;TypeNode typing.Any&gt;, &lt;GenericNode &lt;class &#39;list&#39;&gt;[&lt;TypeNode typing.Any&gt;]&gt;]&gt;</span>
+<span class="nb">str</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="c1">#&gt; &#39;Union[Any, list[Any]]&#39;</span>
+</code></pre></div>
+<h2 id="configurable-options">Configurable options<a class="headerlink" href="#configurable-options" title="Permanent link">&para;</a></h2>
+<p>All configuration options can be passed as keyword arguments to either the <code>typenames</code> or <code>parse_type_tree</code> functions.</p>
+<h3 id="union-syntax-union_syntax">Union Syntax (<code>union_syntax</code>)<a class="headerlink" href="#union-syntax-union_syntax" title="Permanent link">&para;</a></h3>
+<p>This option controls how unions are rendered. It supports both the <code>typing.Union</code> special form and the <code>|</code> operator (bitwise or) syntax from <a href="https://peps.python.org/pep-0604/">PEP 604</a>. Valid options are defined by the enum <code>UnionSyntax</code> and include:</p>
+<ul>
+<li><strong><code>"as_given"</code> (default)</strong>: render the union as it is given without changing syntax.</li>
+<li><strong><code>"or_operator"</code></strong>: render all type unions using the <code>|</code> operator.</li>
+<li><strong><code>"special_form"</code></strong>: render all type unions using the <code>typing.Union</code> special form.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Runtime use of the <code>|</code> operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for the <code>|</code> operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Limitations:</strong> Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of <code>|</code> operator syntax and any typing module types will result in a <code>typing.Union</code> union, so <code>as_given</code> will always render such inputs with <code>typing.Union</code>.</p>
+</div>
+<h3 id="optional-syntax-optional_syntax">Optional Syntax (<code>optional_syntax</code>)<a class="headerlink" href="#optional-syntax-optional_syntax" title="Permanent link">&para;</a></h3>
+<p>This option controls how optional types are rendered. It supports both the <code>typing.Optional</code> special form and the <code>|</code> operator (bitwise or) syntax from <a href="https://peps.python.org/pep-0604/">PEP 604</a>. Valid options are defined by the enum <code>OptionalSyntax</code> and include:</p>
+<ul>
+<li><strong><code>"as_given"</code> (default)</strong>: render the optional type as it is given without changing syntax</li>
+<li><strong><code>"or_operator"</code></strong>: render all optional types using the <code>|</code> operator</li>
+<li><strong><code>"union_special_form"</code></strong>: render all optional types using the <code>typing.Optional</code> special form</li>
+<li><strong><code>"optional_special_form"</code></strong>: render all optional types using the <code>typing.Optional</code> special form</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Runtime use of the <code>|</code> operator between types is new in Python 3.10. To use in earlier versions of Python, you will need to use postponed evaluation of annotations à la <a href="https://peps.python.org/pep-0563/">PEP 563</a> with <code>from __future__ import__annotations__</code>. Support for the <code>|</code> operator is only a limitation on providing type annotation inputs to typenames, and not a limitation on output rendering.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Limitations:</strong></p>
+<ul>
+<li>Python automatically converts <code>typing.Union[..., None]</code> to <code>typing.Optional[...]</code> when evaluating at runtime. Since typenames uses runtime type objects, it will only see the result using <code>typing.Optional</code> and not know the form of your original input.</li>
+<li>Python automatically flattens unions when evaluating them at runtime. Since typenames uses runtime type objects, it will only see the flattened result and not know if your original input was nested. Furthermore, any mixing of <code>|</code> operator syntax and any typing module types will result in a <code>typing.Union</code> union, so <code>as_given</code> will always render such inputs with typing module special forms.</li>
+<li>The <code>typing.Optional</code> special form only accepts exactly one parameter. By default, typenames will render cases with multiple parameters with <code>Optional[Union[...]]</code>. You can use the <code>union_syntax</code> option to control the inner union's syntax.</li>
+</ul>
+</div>
+<h3 id="standard-collection-syntax-standard_collection_syntax">Standard Collection Syntax (<code>standard_collection_syntax</code>)<a class="headerlink" href="#standard-collection-syntax-standard_collection_syntax" title="Permanent link">&para;</a></h3>
+<p><em>Default value changed in v2.0.0</em></p>
+<p>This option controls how parameterized standard collection generic types are rendered. It supports both the typing module's generic aliases (e.g., <code>typing.List[...]</code>) and the standard class (e.g., <code>list[...]</code>) syntax from <a href="https://peps.python.org/pep-0585/">PEP 585</a>. Valid options are defined by the enum <code>StandardCollectionSyntax</code> and include:</p>
+<ul>
+<li><strong><code>"standard_class"</code> (default)</strong>: render all parameterized standard collection generic types using their class</li>
+<li><strong><code>"as_given"</code></strong>: render the parameterized generic type as it is given without changing syntax</li>
+<li><strong><code>"typing_module"</code></strong>: render all parameterized standard collection generic types using the typing module's generic alias</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The typing module's generic aliases are <a href="https://docs.python.org/3/library/typing.html#deprecated-aliases">deprecated</a> in favor of parameterizing standard collection classes. Parameterizing standard collection classes was added in Python 3.9 and is available in all currently supported versions of Python.</p>
+</div>
+<h3 id="removing-module-names-remove_modules">Removing Module Names (<code>remove_modules</code>)<a class="headerlink" href="#removing-module-names-remove_modules" title="Permanent link">&para;</a></h3>
+<p>This option controls how module names are removed from the rendered output. It takes a list of inputs, which can either be a string of the module name or a <code>re.Pattern</code> regex pattern directly (the result of <code>re.compile</code>). String inputs are templated into the following regex pattern:</p>
+<div class="highlight"><pre><span></span><code><span class="n">module</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Given module name</span>
+<span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^</span><span class="si">{}</span><span class="s2">\.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\.&quot;</span><span class="p">)))</span>
+</code></pre></div>
+<p>Note that module names are removed in the given order, so having entries that are submodules of other entries can potentially lead to the wrong behavior. You can either order them from higher-depth to lower-depth, or directly provide a compiled pattern with optional groups. For example, the pattern <code>re.compile(r"^collections\.(abc\.)?")</code> will match both <code>"collections."</code> and <code>"collections.abc."</code>.</p>
+<p>The default list of module names include the standard library modules relevant to <a href="https://peps.python.org/pep-0585/">PEP 585</a> plus <code>types</code> and <code>typing</code>. It can be accessed at <code>DEFAULT_REMOVE_MODULES</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">DEFAULT_REMOVE_MODULES</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;__main__&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;builtins&quot;</span><span class="p">,</span>
+    <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^collections\.(abc\.)?&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;contextlib&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;re&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;types&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;typing&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+<p>If you are trying to <em>add</em> additional modules to this option (rather than overriding the defaults), the easiest way to do so is to concatenate with the default list:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">typenames</span><span class="p">,</span> <span class="n">DEFAULT_REMOVE_MODULES</span><span class="p">,</span> <span class="n">BaseNode</span>
+
+<span class="c1"># Default removals</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;Optional[typenames.BaseNode]&#39;</span>
+
+<span class="c1"># Replace default with &#39;typenames&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">],</span> <span class="n">remove_modules</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;typenames&quot;</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;typing.Optional[BaseNode]&#39;</span>
+
+<span class="c1"># Extend default with &#39;typenames&#39;</span>
+<span class="n">typenames</span><span class="p">(</span>
+    <span class="n">Optional</span><span class="p">[</span><span class="n">BaseNode</span><span class="p">],</span>
+    <span class="n">remove_modules</span><span class="o">=</span><span class="n">DEFAULT_REMOVE_MODULES</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;typenames&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="c1">#&gt; &#39;Optional[BaseNode]&#39;</span>
+</code></pre></div>
+<p>To remove all module names, you can use <code>REMOVE_ALL_MODULES</code>, which contains the pattern <code>re.compile(r"^(&lt;?\w+&gt;?\.)+")</code>.</p>
+<h3 id="annotated-include_extras">Annotated (<code>include_extras</code>)<a class="headerlink" href="#annotated-include_extras" title="Permanent link">&para;</a></h3>
+<p>This option controls whether to render <code>Annotated</code> and the extra metadata. <code>typing.Annotated</code> is a <a href="https://docs.python.org/3/library/typing.html#typing.Annotated">typing special form</a> introduced in Python 3.9 and originally specified by <a href="https://peps.python.org/pep-0593/">PEP 593</a>. Many libraries like <a href="https://docs.pydantic.dev/latest/concepts/fields/#using-annotated">Pydantic</a>, <a href="https://fastapi.tiangolo.com/python-types/#type-hints-with-metadata-annotations">FastAPI</a>, and <a href="https://typer.tiangolo.com/tutorial/arguments/optional/#an-alternative-cli-argument-declaration">Typer</a> use it to attach metadata to type annotations that are used at runtime.</p>
+<p>By default, typenames will <em>not</em> render <code>Annotated</code> and extra metadata. Set <code>include_extras=True</code> to render them.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typenames</span><span class="w"> </span><span class="kn">import</span> <span class="n">typenames</span>
+
+<span class="n">typenames</span><span class="p">(</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;some metadata&quot;</span><span class="p">])</span>
+<span class="c1">#&gt; &#39;int&#39;</span>
+<span class="n">typenames</span><span class="p">(</span><span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;some metadata&quot;</span><span class="p">],</span> <span class="n">include_extras</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1">#&gt; &quot;Annotated[int, &#39;some metadata&#39;]&quot;</span>
+</code></pre></div>
+<hr />
+<p><sup>Reproducible examples created by <a href="https://github.com/jayqi/reprexlite">reprexlite</a>.</sup></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <a href="https://drivendata.co/open-source/"><img style="height: 1.618em;" src="https://drivendata-public-assets.s3.us-east-1.amazonaws.com/logo-white.svg"></a>
+<br>typenames is a <strong><a href="https://drivendata.co/open-source/">DrivenData</a></strong> project
+</div><div>Documentation made with <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://www.drivendata.org/" target="_blank" rel="noopener" title="DrivenData.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M448 96c0-35.3-28.7-64-64-64H64C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64zm-192 64c0 17.7-14.3 32-32 32h-96c-17.7 0-32-14.3-32-32s14.3-32 32-32h96c17.7 0 32 14.3 32 32m64 64c17.7 0 32 14.3 32 32s-14.3 32-32 32H128c-17.7 0-32-14.3-32-32s14.3-32 32-32zM192 352c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32s14.3-32 32-32h32c17.7 0 32 14.3 32 32"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.drivendata.co/" target="_blank" rel="noopener" title="DrivenData Labs" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 96c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64v256h-64V96H128v256H64zM0 403.2C0 392.6 8.6 384 19.2 384h601.6c10.6 0 19.2 8.6 19.2 19.2 0 42.4-34.4 76.8-76.8 76.8H76.8C34.4 480 0 445.6 0 403.2M281 209l-31 31 31 31c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-48-48c-9.4-9.4-9.4-24.6 0-33.9l48-48c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9zm112-34 48 48c9.4 9.4 9.4 24.6 0 33.9l-48 48c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l31-31-31-31c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/drivendataorg" target="_blank" rel="noopener" title="DrivenData on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://bsky.app/profile/drivendata.org" target="_blank" rel="noopener" title="DrivenData on Bluesky" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M111.8 62.2C170.2 105.9 233 194.7 256 242.4c23-47.6 85.8-136.4 144.2-180.2 42.1-31.6 110.3-56 110.3 21.8 0 15.5-8.9 130.5-14.1 149.2-18.2 64.8-84.4 81.4-143.3 71.3C456 322 482.2 380 425.6 438c-107.4 110.2-154.3-27.6-166.3-62.9-1.7-4.9-2.6-7.8-3.3-7.8s-1.6 3-3.3 7.8c-12 35.3-59 173.1-166.3 62.9-56.5-58-30.4-116 72.5-133.5C100 314.6 33.8 298 15.7 233.1 10.4 214.4 1.5 99.4 1.5 83.9c0-77.8 68.2-53.4 110.3-21.8z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "default": "stable", "provider": "mike"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
+</html>
