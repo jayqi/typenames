@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0.6500000357627869 11.100000381469727 43.44999694824219 30.94999885559082"
+   data-asc="0.83"
+   version="1.1"
+   id="svg2"
+   sodipodi:docname="logo.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   inkscape:export-filename="logo.png"
+   inkscape:export-xdpi="112.65885"
+   inkscape:export-ydpi="112.65885"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="namedview2"
+     pagecolor="#000000"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="12.464333"
+     inkscape:cx="14.160405"
+     inkscape:cy="18.853797"
+     inkscape:window-width="1728"
+     inkscape:window-height="1051"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:export-bgcolor="#17344aff">
+    <sodipodi:guide
+       position="21.725,40.176325"
+       orientation="-1,0"
+       id="guide2"
+       inkscape:locked="false"
+       inkscape:label=""
+       inkscape:color="rgb(0,134,229)" />
+  </sodipodi:namedview>
+  <rect
+     style="fill:none;stroke:#ffffff;stroke-width:1.452;stroke-dasharray:none;stroke-opacity:1"
+     id="rect2"
+     width="39.450241"
+     height="26.499741"
+     x="2.649878"
+     y="13.32513"
+     ry="5.5" />
+  <text
+     xml:space="preserve"
+     style="font-size:20.5827px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff;stroke:#ffffff;stroke-width:0.215;stroke-dasharray:none;stroke-opacity:1"
+     x="8.8432379"
+     y="35.075321"
+     id="text2"
+     transform="scale(1.0468455,0.9552508)"><tspan
+       sodipodi:role="line"
+       id="tspan2"
+       x="8.8432379"
+       y="35.075321"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:'JetBrains Mono Slashed';-inkscape-font-specification:'JetBrains Mono Slashed Medium';stroke-width:0.215;stroke-dasharray:none">tn</tspan></text>
+</svg>
